@@ -79,7 +79,7 @@ button {
 }
 
 button:hover {
-  border-color: #ff0000;
+  border-color: #dd35a5;
 }
 button:active {
   border-color: #396cd8;
