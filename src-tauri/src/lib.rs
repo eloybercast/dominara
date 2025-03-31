@@ -1,5 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-use tauri_plugin_updater::UpdaterExt;
+use tauri_plugin_opener;
+use tauri_plugin_updater::UpdaterExt; // For updater functionality // For opener plugin
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -33,6 +34,7 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
             let handle = app.handle().clone();

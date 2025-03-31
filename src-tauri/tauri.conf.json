@@ -31,7 +31,7 @@
     "updater": {
       "active": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDlGQzdEMDYzNzQ2Mjc5QjYKUldTMmVXSjBZOURIbjI5NlFqeFZQNmtNRlJuOHFJSmRINXdRc3NxZys2WWwrQnJjaUZ5ZW1Tcm4K",
-      "endpoints": ["https://github.com/dominara-team/dominara/releases/latest/download/latest.json"],
+      "endpoints": ["https://github.com/eloybercast/dominara/releases/latest/download/latest.json"],
       "windows": {
         "installMode": "quiet"
       }
