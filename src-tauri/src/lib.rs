@@ -11,7 +11,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
             #[cfg(desktop)]
-            app.handle()
+            let _ = app
+                .handle()
                 .plugin(tauri_plugin_updater::Builder::new().build());
             Ok(())
         })

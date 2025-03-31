@@ -23,13 +23,17 @@
   },
   "bundle": {
     "active": true,
+    "createUpdaterArtifacts": true,
     "targets": "all",
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ]
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDlGQzdEMDYzNzQ2Mjc5QjYKUldTMmVXSjBZOURIbjI5NlFqeFZQNmtNRlJuOHFJSmRINXdRc3NxZys2WWwrQnJjaUZ5ZW1Tcm4K",
+      "endpoints": ["https://github.com/dominara-team/dominara/releases/latest/download/latest.json"],
+      "windows": {
+        "installMode": "quiet"
+      }
+    }
   }
 }
