@@ -45,21 +45,6 @@ jobs:
       - name: install frontend dependencies
         run: npm install
 
-      - name: Debug environment variables
-        run: |
-          echo "Checking if secrets are defined:"
-          if [ -n "$TAURI_PRIVATE_KEY" ]; then
-            echo "✅ TAURI_PRIVATE_KEY is defined"
-          else
-            echo "❌ TAURI_PRIVATE_KEY is NOT defined"
-          fi
-          if [ -n "$TAURI_KEY_PASSWORD" ]; then
-            echo "✅ TAURI_KEY_PASSWORD is defined"
-          else
-            echo "❌ TAURI_KEY_PASSWORD is NOT defined"
-          fi
-          echo "Note: This only checks if the variables are defined, not their values"
-
       - name: build and publish
         uses: tauri-apps/tauri-action@v0
         env:
