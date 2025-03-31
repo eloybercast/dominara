@@ -8,53 +8,70 @@ import "./App.css";
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
-  const [updateStatus, setUpdateStatus] = useState("");
+  const [updateStatus, setUpdateStatus] = useState(""); // Estado para mensajes de actualización
+  const [errorMessage, setErrorMessage] = useState(""); // Estado específico para errores
 
   useEffect(() => {
     checkForUpdates();
   }, []);
 
   async function checkForUpdates() {
+    setUpdateStatus("Checking for updates...");
+    setErrorMessage(""); // Limpiar errores previos
+
     try {
       const update = await check();
+      console.log("Update check response:", update);
+
       if (update) {
         setUpdateStatus(`Found update ${update.version} from ${update.date}`);
-        console.log(`found update ${update.version} from ${update.date} with notes ${update.body}`);
+        console.log(`Found update ${update.version} from ${update.date} with notes ${update.body}`);
         let downloaded = 0;
         let contentLength = 0;
 
         await update.downloadAndInstall((event) => {
           switch (event.event) {
             case "Started":
-              contentLength = event.data.contentLength;
-              setUpdateStatus(`Starting download of ${event.data.contentLength} bytes`);
-              console.log(`started downloading ${event.data.contentLength} bytes`);
+              contentLength = event.data.contentLength || "unknown";
+              setUpdateStatus(`Starting download of ${contentLength} bytes`);
+              console.log(`Started downloading ${contentLength} bytes`);
               break;
             case "Progress":
               downloaded += event.data.chunkLength;
-              setUpdateStatus(`Downloaded ${downloaded} from ${contentLength} bytes`);
-              console.log(`downloaded ${downloaded} from ${contentLength}`);
+              setUpdateStatus(`Downloaded ${downloaded} of ${contentLength} bytes`);
+              console.log(`Downloaded ${downloaded} from ${contentLength}`);
               break;
             case "Finished":
               setUpdateStatus("Download finished, installing...");
-              console.log("download finished");
+              console.log("Download finished");
               break;
+            default:
+              setErrorMessage(`Unknown event during update: ${event.event}`);
+              console.error("Unknown event:", event);
           }
         });
 
         setUpdateStatus("Update installed, restarting...");
-        console.log("update installed");
+        console.log("Update installed");
         await relaunch();
+      } else {
+        setUpdateStatus("No updates available");
+        console.log("No update available");
       }
     } catch (error) {
-      console.error("Update error:", error);
-      setUpdateStatus("Error checking for updates");
+      console.error("Update process failed:", error);
+      const errorDetails = error.message || JSON.stringify(error) || "Unknown error occurred";
+      setErrorMessage(`Update failed: ${errorDetails}`);
+      setUpdateStatus(""); // Limpiar el estado de actualización si hay error
     }
   }
 
   async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
+    try {
+      setGreetMsg(await invoke("greet", { name }));
+    } catch (error) {
+      setErrorMessage(`Greet failed: ${error.message || "Unknown error"}`);
+    }
   }
 
   return (
@@ -89,6 +106,14 @@ function App() {
       {updateStatus && (
         <div className="update-status">
           <p>{updateStatus}</p>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="error-message" style={{ color: "red", marginTop: "10px" }}>
+          <p>
+            <strong>Error:</strong> {errorMessage}
+          </p>
         </div>
       )}
     </main>
