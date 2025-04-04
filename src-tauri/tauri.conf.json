@@ -12,9 +12,41 @@
   "app": {
     "windows": [
       {
+        "label": "updater",
+        "title": "Dominara Updates",
+        "width": 600,
+        "height": 400,
+        "visible": true,
+        "url": "/updates",
+        "decorations": false,
+        "transparent": true,
+        "center": true,
+        "resizable": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true
+      },
+      {
+        "label": "auth",
+        "title": "Dominara Auth",
+        "width": 1000,
+        "height": 600,
+        "minWidth": 1000,
+        "minHeight": 600,
+        "visible": false,
+        "url": "/auth",
+        "center": true,
+        "resizable": true,
+        "decorations": false
+      },
+      {
+        "label": "main",
         "title": "dominara",
+        "resizable": false,
         "width": 800,
-        "height": 600
+        "height": 600,
+        "fullscreen": true,
+        "visible": false,
+        "url": "/"
       }
     ],
     "security": {

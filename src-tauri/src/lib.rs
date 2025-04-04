@@ -2,11 +2,6 @@
 use tauri_plugin_opener;
 use tauri_plugin_updater::UpdaterExt; // For updater functionality // For opener plugin
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
     if let Some(update) = app.updater()?.check().await? {
         let mut downloaded = 0;
@@ -35,7 +30,6 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
-        .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
