@@ -23,8 +23,19 @@
         "center": true,
         "resizable": false,
         "alwaysOnTop": true,
-        "skipTaskbar": true,
-        "theme": "Dark"
+        "skipTaskbar": true
+      },
+      {
+        "label": "auth",
+        "title": "Dominara Auth",
+        "width": 1000,
+        "height": 600,
+        "minWidth": 1000,
+        "minHeight": 600,
+        "visible": true,
+        "url": "/auth",
+        "center": true,
+        "resizable": true
       },
       {
         "label": "main",
