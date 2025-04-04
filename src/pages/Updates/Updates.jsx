@@ -3,6 +3,7 @@ import useUpdateStore from "../../stores/updates";
 import logoIcon from "../../assets/logo.svg";
 import styles from "./Updates.module.scss";
 import ProgressBar from "../../components/Progress/ProgressBar/ProgressBar";
+import { Window } from "@tauri-apps/api/window"; // Importar la API de ventana de Tauri
 
 const formatBytes = (bytes) => {
   if (bytes === 0) return "0 B";
@@ -18,8 +19,17 @@ const Updates = () => {
   const { errorMessage, checkForUpdates, downloadProgress, updateStatus, isUpdating } = useUpdateStore();
 
   useEffect(() => {
-    checkForUpdates();
-  }, []);
+    checkForUpdates().then((updateAvailable) => {
+      if (!updateAvailable) {
+        const authWindow = new Window("auth");
+        authWindow.show();
+        authWindow.unminimize();
+        authWindow.setFocus();
+        const updaterWindow = Window.getCurrent();
+        updaterWindow.close();
+      }
+    });
+  }, [checkForUpdates]);
 
   return (
     <main className={styles.updates}>
@@ -27,13 +37,14 @@ const Updates = () => {
         <img src={logoIcon} alt="Logo" className={styles.logo} />
       </section>
       <section className={styles.updates__progress}>
-        <ProgressBar progress={90} total={100} />
-        {isUpdating ? (
+        <ProgressBar
+          progress={isUpdating ? (downloadProgress.downloaded / downloadProgress.total) * 100 : 90}
+          total={100}
+        />
+        {isUpdating && (
           <small>
             {formatBytes(downloadProgress.downloaded)} / {formatBytes(downloadProgress.total)}
           </small>
-        ) : (
-          <small>{updateStatus}</small>
         )}
       </section>
     </main>

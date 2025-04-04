@@ -32,10 +32,11 @@
         "height": 600,
         "minWidth": 1000,
         "minHeight": 600,
-        "visible": true,
+        "visible": false,
         "url": "/auth",
         "center": true,
-        "resizable": true
+        "resizable": true,
+        "decorations": false
       },
       {
         "label": "main",
