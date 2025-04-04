@@ -12,9 +12,29 @@
   "app": {
     "windows": [
       {
+        "label": "updater",
+        "title": "Dominara Updates",
+        "width": 600,
+        "height": 400,
+        "visible": true,
+        "url": "/updates",
+        "decorations": false,
+        "transparent": true,
+        "center": true,
+        "resizable": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "theme": "Dark"
+      },
+      {
+        "label": "main",
         "title": "dominara",
+        "resizable": false,
         "width": 800,
-        "height": 600
+        "height": 600,
+        "fullscreen": true,
+        "visible": false,
+        "url": "/"
       }
     ],
     "security": {
