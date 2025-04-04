@@ -3,7 +3,12 @@ import { relaunch } from "@tauri-apps/plugin-process";
 
 class UpdateService {
   async checkForUpdates(callbacks = {}) {
-    const { onStatusChange = () => {}, onError = () => {}, onProgress = () => {} } = callbacks;
+    const {
+      onStatusChange = () => {},
+      onError = () => {},
+      onProgress = () => {},
+      setIsUpdating = () => {},
+    } = callbacks;
 
     try {
       const update = await check();
@@ -17,6 +22,7 @@ class UpdateService {
           switch (event.event) {
             case "Started":
               contentLength = event.data.contentLength || "unknown";
+              setIsUpdating(true);
               onStatusChange(`Starting download of ${contentLength} bytes`);
               break;
             case "Progress":
@@ -25,6 +31,7 @@ class UpdateService {
               onStatusChange(`Downloaded ${downloaded} of ${contentLength} bytes`);
               break;
             case "Finished":
+              setIsUpdating(false);
               onStatusChange("Download finished, installing...");
               break;
             default:

@@ -5,6 +5,7 @@ const useUpdateStore = create((set, get) => ({
   updateStatus: "",
   errorMessage: "",
   isChecking: false,
+  isUpdating: false,
   downloadProgress: {
     downloaded: 0,
     total: 0,
@@ -13,19 +14,20 @@ const useUpdateStore = create((set, get) => ({
   setUpdateStatus: (status) => set({ updateStatus: status }),
   setErrorMessage: (error) => set({ errorMessage: error }),
   setDownloadProgress: (downloaded, total) => set({ downloadProgress: { downloaded, total } }),
+  setIsUpdating: (isUpdating) => set({ isUpdating }),
 
   checkForUpdates: async () => {
-    const { setUpdateStatus, setErrorMessage, setDownloadProgress } = get();
+    const { setUpdateStatus, setErrorMessage, setDownloadProgress, setIsUpdating } = get();
 
     set({ isChecking: true });
     setUpdateStatus("Checking for updates...");
     setErrorMessage("");
-
     try {
       await updateService.checkForUpdates({
         onStatusChange: setUpdateStatus,
         onError: setErrorMessage,
         onProgress: setDownloadProgress,
+        setIsUpdating: setIsUpdating,
       });
     } catch (error) {
       setUpdateStatus("");

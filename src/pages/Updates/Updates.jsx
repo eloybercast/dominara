@@ -1,10 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useUpdateStore from "../../stores/updates";
 import logoIcon from "../../assets/logo.svg";
 import styles from "./Updates.module.scss";
 import ProgressBar from "../../components/Progress/ProgressBar/ProgressBar";
+
+const formatBytes = (bytes) => {
+  if (bytes === 0) return "0 B";
+
+  const units = ["B", "KB", "MB", "GB"];
+  const k = 1024;
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${units[i]}`;
+};
+
 const Updates = () => {
-  const { errorMessage, checkForUpdates, downloadProgress, updateStatus } = useUpdateStore();
+  const { errorMessage, checkForUpdates, downloadProgress, updateStatus, isUpdating } = useUpdateStore();
 
   useEffect(() => {
     checkForUpdates();
@@ -17,7 +28,13 @@ const Updates = () => {
       </section>
       <section className={styles.updates__progress}>
         <ProgressBar progress={90} total={100} />
-        <small>{updateStatus}</small>
+        {isUpdating ? (
+          <small>
+            {formatBytes(downloadProgress.downloaded)} / {formatBytes(downloadProgress.total)}
+          </small>
+        ) : (
+          <small>{updateStatus}</small>
+        )}
       </section>
     </main>
   );
