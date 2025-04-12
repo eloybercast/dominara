@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import useUpdateStore from "../../stores/updates";
 import logoIcon from "../../assets/logo.svg";
 import styles from "./Updates.module.scss";
 import ProgressBar from "../../components/Progress/ProgressBar/ProgressBar";
-import { Window } from "@tauri-apps/api/window"; // Importar la API de ventana de Tauri
+import { Window } from "@tauri-apps/api/window";
 
 const formatBytes = (bytes) => {
   if (bytes === 0) return "0 B";
-
   const units = ["B", "KB", "MB", "GB"];
   const k = 1024;
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${units[i]}`;
 };
 
@@ -19,14 +17,20 @@ const Updates = () => {
   const { errorMessage, checkForUpdates, downloadProgress, updateStatus, isUpdating } = useUpdateStore();
 
   useEffect(() => {
-    checkForUpdates().then((updateAvailable) => {
+    const updaterWindow = Window.getCurrent();
+
+    checkForUpdates().then(async (updateAvailable) => {
       if (!updateAvailable) {
-        const authWindow = new Window("auth");
-        authWindow.show();
-        authWindow.unminimize();
-        authWindow.setFocus();
-        const updaterWindow = Window.getCurrent();
-        updaterWindow.close();
+        try {
+          const authWindow = new Window("auth");
+          await authWindow.show();
+          await authWindow.unminimize();
+          await authWindow.setFocus();
+
+          await updaterWindow.close();
+        } catch (error) {
+          console.error("Error transitioning to auth window:", error);
+        }
       }
     });
   }, [checkForUpdates]);
@@ -37,11 +41,9 @@ const Updates = () => {
         <img src={logoIcon} alt="Logo" className={styles.logo} />
       </section>
       <section className={styles.updates__progress}>
-        <ProgressBar
-          progress={isUpdating ? (downloadProgress.downloaded / downloadProgress.total) * 100 : 90}
-          total={100}
-        />
-        {isUpdating && (
+        {isUpdating ? (
+          <ProgressBar progress={downloadProgress.downloaded} total={downloadProgress.total} />
+        ) : (
           <small>
             {formatBytes(downloadProgress.downloaded)} / {formatBytes(downloadProgress.total)}
           </small>

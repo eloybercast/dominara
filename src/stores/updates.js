@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import updateService from "../services/updateService";
+import updateService from "../services/update.service";
 
 const useUpdateStore = create((set, get) => ({
   updateStatus: "",
