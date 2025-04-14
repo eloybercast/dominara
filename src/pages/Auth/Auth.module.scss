@@ -1,0 +1,35 @@
+.auth {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #c0c0c0;
+
+  &__left,
+  &__right {
+    width: 50%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
+.auth__right {
+  position: relative;
+  z-index: 2;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: #d9d9d9;
+
+    transform: rotate(25deg) scale(1.75) translateX(5em);
+
+    z-index: -1;
+  }
+}
