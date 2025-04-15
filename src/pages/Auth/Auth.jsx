@@ -8,9 +8,7 @@ const Auth = () => {
       <section className={styles.auth__left}>
         <AuthForm />
       </section>
-      <section className={styles.auth__right}>
-        <h1>Welcome to Dominara</h1>
-      </section>
+      <section className={styles.auth__right}></section>
     </main>
   );
 };

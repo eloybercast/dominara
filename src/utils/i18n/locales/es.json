@@ -1,0 +1,39 @@
+{
+  "auth": {
+    "error_missing_fields": "Todos los campos son obligatorios",
+    "error_email_exists": "El correo electrónico ya existe",
+    "error_username_exists": "El nombre de usuario ya existe",
+    "error_invalid_email": "Formato de correo electrónico inválido",
+    "error_invalid_password": "La contraseña debe tener al menos 8 caracteres",
+    "error_passwords_not_match": "Las contraseñas no coinciden",
+    "error_invalid_credentials": "Correo electrónico o contraseña inválidos",
+    "error_google_login_required": "Por favor, usa Google para iniciar sesión con esta cuenta",
+    "error_no_token": "Falta el token de autorización",
+    "error_google_auth_failed": "La autenticación con Google ha fallado",
+    "error_user_not_found": "Usuario no encontrado",
+    "error_email_already_verified": "El correo electrónico ya está verificado",
+    "error_missing_code": "Se requiere código de verificación",
+    "error_invalid_code": "Código de verificación inválido",
+    "error_expired_code": "El código de verificación ha expirado",
+
+    "verify_your_email": "Verifica tu Correo Electrónico",
+    "verification_code_sent": "Hemos enviado un código de verificación a {email}. Por favor, introduce el código de 6 dígitos a continuación.",
+    "enter_6_digit_code": "Introduce el código de 6 dígitos de tu correo",
+    "resend_code": "Reenviar Código",
+    "sending_code": "Enviando...",
+    "verification_email_sent": "Correo de verificación enviado con éxito",
+    "email_verified_success": "¡Correo verificado con éxito! Redirigiendo..."
+  },
+  "error": {
+    "server": "Error del servidor. Inténtalo de nuevo más tarde",
+    "too_many_requests": "Demasiadas solicitudes. Inténtalo de nuevo más tarde",
+    "unknown": "Ocurrió un error inesperado"
+  },
+  "success": {
+    "registration": "Registro exitoso",
+    "login": "Inicio de sesión exitoso",
+    "logout": "Sesión cerrada exitosamente",
+    "email_verification_sent": "Correo de verificación enviado exitosamente",
+    "email_verified": "Correo electrónico verificado exitosamente"
+  }
+}

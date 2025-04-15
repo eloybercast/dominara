@@ -1,0 +1,39 @@
+{
+  "auth": {
+    "error_missing_fields": "All fields are required",
+    "error_email_exists": "Email already exists",
+    "error_username_exists": "Username already exists",
+    "error_invalid_email": "Invalid email format",
+    "error_invalid_password": "Password must be at least 8 characters",
+    "error_passwords_not_match": "Passwords do not match",
+    "error_invalid_credentials": "Invalid email or password",
+    "error_google_login_required": "Please use Google to log in with this account",
+    "error_no_token": "Authorization token is missing",
+    "error_google_auth_failed": "Google authentication failed",
+    "error_user_not_found": "User not found",
+    "error_email_already_verified": "Email is already verified",
+    "error_missing_code": "Verification code is required",
+    "error_invalid_code": "Invalid verification code",
+    "error_expired_code": "Verification code has expired",
+
+    "verify_your_email": "Verify Your Email",
+    "verification_code_sent": "We've sent a verification code to {email}. Please enter the 6-digit code below.",
+    "enter_6_digit_code": "Enter the 6-digit code from your email",
+    "resend_code": "Resend Code",
+    "sending_code": "Sending...",
+    "verification_email_sent": "Verification email sent successfully",
+    "email_verified_success": "Email verified successfully! Redirecting..."
+  },
+  "error": {
+    "server": "Server error. Please try again later",
+    "too_many_requests": "Too many requests. Please try again later",
+    "unknown": "An unexpected error occurred"
+  },
+  "success": {
+    "registration": "Registration successful",
+    "login": "Login successful",
+    "logout": "Logged out successfully",
+    "email_verification_sent": "Verification email sent successfully",
+    "email_verified": "Email verified successfully"
+  }
+}

@@ -87,3 +87,25 @@
     cursor: pointer;
   }
 }
+
+.login__error {
+  width: 100%;
+  padding: 0.8em;
+  margin-top: 0.5em;
+  margin-bottom: 0.8em;
+  color: var(--red-1);
+  background-color: var(--red-1-opacity);
+  font-size: 0.9em;
+  border-left: 3px solid var(--red-1);
+  box-sizing: border-box;
+  border-radius: 2px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Prevent layout shift during animation */
+  will-change: height, opacity, margin, padding;
+  transform-origin: top center;
+}

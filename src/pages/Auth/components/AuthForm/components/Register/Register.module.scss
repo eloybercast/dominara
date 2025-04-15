@@ -9,16 +9,44 @@
   height: 100%;
 }
 
+.register__error {
+  width: 100%;
+  padding: 0.8em;
+  margin-top: 0.5em;
+  margin-bottom: 0.8em;
+  color: var(--red-1);
+  background-color: var(--red-1-opacity);
+  font-size: 0.9em;
+  border-left: 3px solid var(--red-1);
+  box-sizing: border-box;
+  border-radius: 2px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Prevent layout shift during animation */
+  will-change: height, opacity, margin, padding;
+  transform-origin: top center;
+}
+
 .register__input {
   border: none;
   outline: none;
   background-color: var(--blue-3) !important;
   color: var(--black);
   cursor: default;
+  transition: all 0.05s ease;
 
   &::placeholder {
     color: black;
     opacity: 0.7;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 }
 
@@ -53,6 +81,11 @@
     border-radius: 0em;
     background-color: var(--white);
     height: 2.5em;
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
   }
 
   button:hover {
