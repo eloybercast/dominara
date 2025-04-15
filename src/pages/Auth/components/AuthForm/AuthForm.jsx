@@ -3,10 +3,9 @@ import styles from "./AuthForm.module.scss";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import { AnimatePresence, motion } from "framer-motion";
-import useAuthStore from "../../../../stores/auth";
 
 const AuthForm = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
