@@ -22,7 +22,7 @@ const AuthForm = () => {
               initial={{ x: -20 }}
               animate={{ x: 0 }}
               exit={{ x: 20 }}
-              transition={{ duration: 0.1 }}
+              transition={{ duration: 0.15 }}
               style={{ width: "100%" }}
             >
               <Login />

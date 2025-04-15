@@ -38,7 +38,7 @@ const Login = () => {
         initial={{ y: -30 }}
         animate={{ y: 0 }}
         exit={{ y: -15, opacity: 0 }}
-        transition={{ duration: 0.1 }}
+        transition={{ duration: 0.15 }}
         whileHover={{ rotate: -1 }}
       />
       <motion.input
@@ -50,7 +50,7 @@ const Login = () => {
         initial={{ y: -30 }}
         animate={{ y: 0 }}
         exit={{ y: -15, opacity: 0 }}
-        transition={{ duration: 0.1, delay: 0.05 }}
+        transition={{ duration: 0.15, delay: 0.05 }}
         whileHover={{ rotate: 0.5 }}
       />
       <motion.div
@@ -58,7 +58,7 @@ const Login = () => {
         initial={{ y: -30 }}
         animate={{ y: 0 }}
         exit={{ y: -15, opacity: 0 }}
-        transition={{ duration: 0.1, delay: 0.1 }}
+        transition={{ duration: 0.15, delay: 0.1 }}
       >
         <motion.button
           className={styles.login__buttons__google}
