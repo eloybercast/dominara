@@ -10,21 +10,21 @@ import { slideVariants, springTransition, buttonTransition } from "./animations/
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showVerification, setShowVerification] = useState(false);
-  const [direction, setDirection] = useState(1); // 1 for right, -1 for left
+  const [direction, setDirection] = useState(1);
   const { user } = useAuthStore();
 
   const toggleForm = () => {
     if (showVerification) {
-      setDirection(-1); // Going back to login
+      setDirection(-1);
       setShowVerification(false);
     } else {
-      setDirection(isLogin ? 1 : -1); // Direction based on current form
+      setDirection(isLogin ? 1 : -1);
       setIsLogin(!isLogin);
     }
   };
 
   const handleRegistrationSuccess = () => {
-    setDirection(1); // Going forward to verification
+    setDirection(1);
     setShowVerification(true);
   };
 

@@ -61,7 +61,6 @@ const Register = ({ onSuccess }) => {
       const data = await register(email, username, password);
       login(data.user);
 
-      // Call onSuccess if provided, otherwise navigate to home
       if (onSuccess && typeof onSuccess === "function") {
         onSuccess();
       } else {
