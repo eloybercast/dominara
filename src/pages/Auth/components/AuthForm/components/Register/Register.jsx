@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./Register.module.scss";
 import googleIcon from "../../../../../../assets/icons/google.svg";
 import playIcon from "../../../../../../assets/icons/play.svg";
-import { motion, AnimatePresence } from "framer-motion";
 import useAuthStore from "../../../../../../stores/auth";
 import { register } from "../../../../../../services/backend/auth.service";
 import { useNavigate } from "react-router-dom";
@@ -76,123 +75,52 @@ const Register = ({ onSuccess }) => {
 
   return (
     <form className={styles.register} onSubmit={handleSubmit}>
-      <AnimatePresence mode="wait">
-        {error && (
-          <motion.div
-            className={styles.register__error}
-            initial={{ opacity: 0, scaleY: 0, height: 0, marginTop: 0, marginBottom: 0, padding: 0 }}
-            animate={{
-              opacity: 1,
-              scaleY: 1,
-              height: "auto",
-              marginTop: "0.5em",
-              marginBottom: "0.8em",
-              padding: "0.8em",
-            }}
-            exit={{
-              opacity: 0,
-              scaleY: 0,
-              height: 0,
-              marginTop: 0,
-              marginBottom: 0,
-              padding: 0,
-            }}
-            transition={{
-              duration: 0.35,
-              ease: [0.04, 0.62, 0.23, 0.98],
-              when: "beforeChildren",
-            }}
-          >
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25, delay: 0.1 }}
-            >
-              {error}
-            </motion.span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {error && (
+        <div className={styles.register__error}>
+          <span>{error}</span>
+        </div>
+      )}
 
-      <motion.input
+      <input
         className={styles.register__input}
         type="text"
         placeholder="Username"
         value={username}
         onChange={handleChangeUsername}
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -15, opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        whileHover={{ rotate: -0.8 }}
         disabled={isLoading}
       />
-      <motion.input
+      <input
         className={styles.register__input}
         type="email"
         placeholder="Email"
         value={email}
         onChange={handleChangeEmail}
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -15, opacity: 0 }}
-        transition={{ duration: 0.25, delay: 0.05 }}
-        whileHover={{ rotate: 0.5 }}
         disabled={isLoading}
       />
-      <motion.input
+      <input
         className={styles.register__input}
         type="password"
         placeholder="Password"
         value={password}
         onChange={handleChangePassword}
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -15, opacity: 0 }}
-        transition={{ duration: 0.25, delay: 0.1 }}
-        whileHover={{ rotate: -0.7 }}
         disabled={isLoading}
       />
-      <motion.input
+      <input
         className={styles.register__input}
         type="password"
         placeholder="Repeat Password"
         value={repeatPassword}
         onChange={handleChangeRepeatPassword}
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -15, opacity: 0 }}
-        transition={{ duration: 0.25, delay: 0.15 }}
-        whileHover={{ rotate: 0.6 }}
         disabled={isLoading}
       />
-      <motion.div
-        className={styles.register__buttons}
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -15, opacity: 0 }}
-        transition={{ duration: 0.25, delay: 0.2 }}
-      >
-        <motion.button
-          className={styles.register__buttons__google}
-          type="button"
-          whileHover={{ rotate: -0.5 }}
-          whileTap={{ scale: 0.95 }}
-          disabled={isLoading}
-        >
+      <div className={styles.register__buttons}>
+        <button className={styles.register__buttons__google} type="button" disabled={isLoading}>
           <img src={googleIcon} alt="google" />
-        </motion.button>
-        <motion.button
-          className={styles.register__buttons__register}
-          type="submit"
-          whileHover={{ rotate: 0.5 }}
-          whileTap={{ scale: 0.95 }}
-          disabled={isLoading}
-        >
+        </button>
+        <button className={styles.register__buttons__register} type="submit" disabled={isLoading}>
           <img src={playIcon} alt="play" />
-        </motion.button>
-      </motion.div>
+        </button>
+      </div>
     </form>
   );
 };

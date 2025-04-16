@@ -1,0 +1,13 @@
+{
+  "state": {
+    "isAuthenticated": true,
+    "user": {
+      "id": "67fe6f32d4996ef0d7bf2ff9",
+      "email": "eloybercast@gmail.com",
+      "username": "Eloy",
+      "emailVerified": true
+    },
+    "formData": { "username": "", "email": "", "password": "", "repeatPassword": "" }
+  },
+  "version": 0
+}

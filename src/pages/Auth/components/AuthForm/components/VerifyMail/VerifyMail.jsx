@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "./VerifyMail.module.scss";
-import { motion } from "framer-motion";
 import { sendVerificationEmail, verifyEmail } from "../../../../../../services/backend/auth.service";
 import { translate, getErrorMessage } from "../../../../../../utils/i18n";
 import useAuthStore from "../../../../../../stores/auth";
@@ -36,7 +35,7 @@ const VerifyMail = () => {
     } finally {
       setTimeout(() => {
         setIsResending(false);
-      }, 5000); // Prevent too frequent resend attempts
+      }, 5000);
     }
   };
 
@@ -45,7 +44,6 @@ const VerifyMail = () => {
       setIsLoading(true);
       await verifyEmail(code);
 
-      // On successful verification, redirect to home
       setTimeout(() => {
         navigate("/");
       }, 1500);
@@ -57,9 +55,7 @@ const VerifyMail = () => {
   };
 
   useEffect(() => {
-    // Send verification email only once when component mounts
     handleSendVerificationEmail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -71,7 +67,7 @@ const VerifyMail = () => {
       </div>
 
       <div className={styles.verifyMail__form}>
-        <motion.input
+        <input
           className={styles.verifyMail__input}
           type="text"
           placeholder="000000"
@@ -79,18 +75,15 @@ const VerifyMail = () => {
           onChange={handleCodeChange}
           maxLength={6}
           disabled={isLoading}
-          initial={{ y: -15 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.1 }}
         />
 
-        <motion.button
+        <button
           className={styles.verifyMail__resend}
           onClick={handleSendVerificationEmail}
           disabled={isLoading || isResending}
         >
           {isResending ? translate("auth.sending_code") : translate("auth.resend_code")}
-        </motion.button>
+        </button>
       </div>
 
       {!digitsFilled && <div className={styles.verifyMail__hint}>{translate("auth.enter_6_digit_code")}</div>}

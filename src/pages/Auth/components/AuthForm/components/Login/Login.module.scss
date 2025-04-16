@@ -105,7 +105,6 @@
   align-items: center;
   justify-content: center;
 
-  /* Prevent layout shift during animation */
   will-change: height, opacity, margin, padding;
   transform-origin: top center;
 }
