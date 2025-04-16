@@ -4,6 +4,7 @@ import { sendVerificationEmail, verifyEmail } from "../../../../../../services/b
 import { translate, getErrorMessage } from "../../../../../../utils/i18n";
 import useAuthStore from "../../../../../../stores/auth";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 const VerifyMail = () => {
   const { user } = useAuthStore();
@@ -12,6 +13,7 @@ const VerifyMail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [digitsFilled, setDigitsFilled] = useState(false);
+  const [error, setError] = useState("");
 
   const handleCodeChange = (e) => {
     const code = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
@@ -32,6 +34,7 @@ const VerifyMail = () => {
       await sendVerificationEmail();
     } catch (error) {
       console.error("Failed to send verification email:", error);
+      setError(getErrorMessage(error));
     } finally {
       setTimeout(() => {
         setIsResending(false);
@@ -49,6 +52,7 @@ const VerifyMail = () => {
       }, 1500);
     } catch (error) {
       console.error("Failed to verify email:", error);
+      setError(getErrorMessage(error));
     } finally {
       setIsLoading(false);
     }
@@ -65,6 +69,20 @@ const VerifyMail = () => {
       <div className={styles.verifyMail__message}>
         {translate("auth.verification_code_sent", { email: user?.email || "" })}
       </div>
+
+      <AnimatePresence mode="wait">
+        {error && (
+          <motion.div
+            className={styles.verifyMail__error}
+            initial={{ opacity: 0, y: -20, height: 0, margin: 0, padding: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto", margin: "0.5em 0", padding: "0.8em" }}
+            exit={{ opacity: 0, y: -10, height: 0, margin: 0, padding: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <span>{error}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className={styles.verifyMail__form}>
         <input
@@ -86,7 +104,19 @@ const VerifyMail = () => {
         </button>
       </div>
 
-      {!digitsFilled && <div className={styles.verifyMail__hint}>{translate("auth.enter_6_digit_code")}</div>}
+      <AnimatePresence mode="wait">
+        {!digitsFilled && (
+          <motion.div
+            className={styles.verifyMail__hint}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 5 }}
+            transition={{ duration: 0.3 }}
+          >
+            {translate("auth.enter_6_digit_code")}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

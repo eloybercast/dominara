@@ -6,6 +6,7 @@ import useAuthStore from "../../../../../../stores/auth";
 import { register } from "../../../../../../services/backend/auth.service";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../../../../../utils/i18n";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Register = ({ onSuccess }) => {
   const navigate = useNavigate();
@@ -75,11 +76,19 @@ const Register = ({ onSuccess }) => {
 
   return (
     <form className={styles.register} onSubmit={handleSubmit}>
-      {error && (
-        <div className={styles.register__error}>
-          <span>{error}</span>
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {error && (
+          <motion.div
+            className={styles.register__error}
+            initial={{ opacity: 0, y: -20, height: 0, margin: 0, padding: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto", margin: "0.5em 0 0.8em 0", padding: "0.8em" }}
+            exit={{ opacity: 0, y: -10, height: 0, margin: 0, padding: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <span>{error}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <input
         className={styles.register__input}

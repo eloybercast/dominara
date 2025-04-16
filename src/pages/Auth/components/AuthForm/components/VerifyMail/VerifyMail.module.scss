@@ -23,6 +23,26 @@
   line-height: 1.4;
 }
 
+.verifyMail__error {
+  width: 100%;
+  padding: 0.8em;
+  margin: 0.5em 0;
+  color: var(--red-1);
+  background-color: var(--red-1-opacity);
+  font-size: 0.9em;
+  border-left: 3px solid var(--red-1);
+  box-sizing: border-box;
+  border-radius: 2px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  will-change: height, opacity, margin, padding;
+  transform-origin: top center;
+}
+
 .verifyMail__form {
   display: flex;
   flex-direction: column;

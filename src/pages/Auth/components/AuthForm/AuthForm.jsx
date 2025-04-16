@@ -4,66 +4,93 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import VerifyMail from "./components/VerifyMail/VerifyMail";
 import useAuthStore from "../../../../stores/auth";
+import { motion, AnimatePresence } from "framer-motion";
+import { slideVariants, springTransition, buttonTransition } from "./animations/formAnimations";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showVerification, setShowVerification] = useState(false);
+  const [direction, setDirection] = useState(1); // 1 for right, -1 for left
   const { user } = useAuthStore();
 
   const toggleForm = () => {
     if (showVerification) {
+      setDirection(-1); // Going back to login
       setShowVerification(false);
     } else {
+      setDirection(isLogin ? 1 : -1); // Direction based on current form
       setIsLogin(!isLogin);
     }
   };
 
   const handleRegistrationSuccess = () => {
+    setDirection(1); // Going forward to verification
     setShowVerification(true);
   };
 
   const renderContent = () => {
+    let content;
+    let key;
+
     if (showVerification) {
-      return (
-        <div style={{ width: "100%" }}>
-          <VerifyMail />
-        </div>
-      );
+      content = <VerifyMail />;
+      key = "verification";
     } else if (isLogin) {
-      return (
-        <div style={{ width: "100%" }}>
-          <Login />
-        </div>
-      );
+      content = <Login />;
+      key = "login";
     } else {
-      return (
-        <div style={{ width: "100%" }}>
-          <Register onSuccess={handleRegistrationSuccess} />
-        </div>
-      );
+      content = <Register onSuccess={handleRegistrationSuccess} />;
+      key = "register";
     }
+
+    return (
+      <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+        <motion.div
+          key={key}
+          custom={direction}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={springTransition}
+          style={{ width: "100%" }}
+        >
+          {content}
+        </motion.div>
+      </AnimatePresence>
+    );
   };
 
   const renderToggleButton = () => {
+    let buttonText;
+    let toggleKey;
+
     if (showVerification) {
-      return (
-        <button className={styles.authForm__toggle} onClick={toggleForm}>
-          Back to Login
-        </button>
-      );
+      buttonText = "Back to Login";
+      toggleKey = "back-to-login";
     } else if (isLogin) {
-      return (
-        <button className={styles.authForm__toggle} onClick={toggleForm}>
-          Need an account? Register
-        </button>
-      );
+      buttonText = "Need an account? Register";
+      toggleKey = "to-register";
     } else {
-      return (
-        <button className={styles.authForm__toggle} onClick={toggleForm}>
-          Already have an account? Login
-        </button>
-      );
+      buttonText = "Already have an account? Login";
+      toggleKey = "to-login";
     }
+
+    return (
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.button
+          className={styles.authForm__toggle}
+          onClick={toggleForm}
+          key={toggleKey}
+          variants={buttonTransition}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          {buttonText}
+        </motion.button>
+      </AnimatePresence>
+    );
   };
 
   return (

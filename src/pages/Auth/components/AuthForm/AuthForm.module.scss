@@ -29,12 +29,13 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 
   width: 100%;
   height: auto;
   min-height: 8em;
-  perspective: 800px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
 
 .authForm__toggleContainer {
@@ -45,6 +46,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 1em;
+  overflow: hidden;
 }
 
 .authForm__toggle {
@@ -54,9 +56,17 @@
   outline: none;
   color: var(--black);
   font-size: 0.9rem;
+  width: 100%;
   cursor: pointer;
   padding: 0.5em 1em;
   text-decoration: underline;
   font-weight: 500;
   transform: rotate(0.5deg);
+  transition: transform 0.3s ease;
+  will-change: opacity, transform;
+}
+
+.authForm__toggle:hover {
+  transform: scale(1.05) rotate(0.5deg);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }

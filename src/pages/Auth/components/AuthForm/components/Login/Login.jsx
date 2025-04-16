@@ -6,6 +6,7 @@ import useAuthStore from "../../../../../../stores/auth";
 import { login } from "../../../../../../services/backend/auth.service";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../../../../../utils/i18n";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -50,11 +51,19 @@ const Login = () => {
 
   return (
     <form className={styles.login} onSubmit={handleSubmit}>
-      {error && (
-        <div className={styles.login__error}>
-          <span>{error}</span>
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {error && (
+          <motion.div
+            className={styles.login__error}
+            initial={{ opacity: 0, y: -20, height: 0, margin: 0, padding: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto", margin: "0.5em 0 0.8em 0", padding: "0.8em" }}
+            exit={{ opacity: 0, y: -10, height: 0, margin: 0, padding: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <span>{error}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <input
         className={styles.login__input}
