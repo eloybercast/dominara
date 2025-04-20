@@ -5,7 +5,7 @@ import Register from "./components/Register/Register";
 import VerifyMail from "./components/VerifyMail/VerifyMail";
 import useAuthStore from "../../../../stores/auth";
 import { motion, AnimatePresence } from "framer-motion";
-import { slideVariants, springTransition, buttonTransition } from "./animations/formAnimations";
+import { slideVariants, springTransition } from "./animations/formAnimations";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -61,43 +61,26 @@ const AuthForm = () => {
     );
   };
 
-  const renderToggleButton = () => {
-    let buttonText;
-    let toggleKey;
-
+  const getToggleButtonText = () => {
     if (showVerification) {
-      buttonText = "Back to Login";
-      toggleKey = "back-to-login";
+      return "Back to Login";
     } else if (isLogin) {
-      buttonText = "Need an account? Register";
-      toggleKey = "to-register";
+      return "Need an account? Register";
     } else {
-      buttonText = "Already have an account? Login";
-      toggleKey = "to-login";
+      return "Already have an account? Login";
     }
-
-    return (
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.button
-          className={styles.authForm__toggle}
-          onClick={toggleForm}
-          key={toggleKey}
-          variants={buttonTransition}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          {buttonText}
-        </motion.button>
-      </AnimatePresence>
-    );
   };
 
   return (
     <article className={styles.authForm}>
       <div className={styles.authForm__header}>{/** Logo */}</div>
-      <div className={styles.authForm__content}>{renderContent()}</div>
-      <div className={styles.authForm__toggleContainer}>{renderToggleButton()}</div>
+
+      <div className={styles.authForm__content}>
+        <div className={styles.authForm__toggle} onClick={toggleForm}>
+          {getToggleButtonText()}
+        </div>
+        {renderContent()}
+      </div>
     </article>
   );
 };

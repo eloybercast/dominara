@@ -1,10 +1,10 @@
 export const slideVariants = {
   enter: (direction) => ({
-    x: direction > 0 ? 500 : -500,
+    x: direction > 0 ? 300 : -300,
     opacity: 0,
-    scale: 0.8,
-    rotateY: direction > 0 ? 15 : -15,
-    z: -70,
+    scale: 0.9,
+    rotateY: direction > 0 ? 5 : -5,
+    z: -30,
   }),
   center: {
     x: 0,
@@ -13,42 +13,44 @@ export const slideVariants = {
     rotateY: 0,
     z: 0,
     transition: {
-      delay: 0.2,
+      delay: 0.1,
     },
   },
   exit: (direction) => ({
-    x: direction > 0 ? -500 : 500,
+    x: direction > 0 ? -300 : 300,
     opacity: 0,
-    scale: 0.8,
-    rotateY: direction > 0 ? -15 : 15,
-    z: -70,
+    scale: 0.9,
+    rotateY: direction > 0 ? -5 : 5,
+    z: -30,
   }),
 };
 
 export const springTransition = {
   type: "spring",
-  stiffness: 300,
-  damping: 24,
-  mass: 0.9,
-  velocity: 5,
-  duration: 0.35,
+  stiffness: 350,
+  damping: 30,
+  mass: 0.8,
+  velocity: 2,
+  duration: 0.3,
 };
 
 export const exitBeforeEnter = true;
 
 export const buttonTransition = {
-  initial: { opacity: 0 },
+  initial: { opacity: 0, y: -10 },
   animate: {
     opacity: 1,
+    y: 0,
     transition: {
-      duration: 0.3,
-      delay: 0.3,
+      duration: 0.2,
+      delay: 0.1,
     },
   },
   exit: {
     opacity: 0,
+    y: -10,
     transition: {
-      duration: 0.2,
+      duration: 0.15,
     },
   },
 };

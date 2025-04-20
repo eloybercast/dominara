@@ -26,7 +26,6 @@
   align-items: center;
   justify-content: center;
 
-  /* Prevent layout shift during animation */
   will-change: height, opacity, margin, padding;
   transform-origin: top center;
 }
@@ -47,6 +46,22 @@
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+  }
+
+  &:nth-child(1) {
+    transform: rotate(0.25deg);
+  }
+
+  &:nth-child(2) {
+    transform: rotate(-0.5deg);
+  }
+
+  &:nth-child(3) {
+    transform: rotate(0.3deg);
+  }
+
+  &:nth-child(4) {
+    transform: rotate(-0.3deg);
   }
 }
 
