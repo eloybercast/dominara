@@ -3,7 +3,7 @@ import useUpdateStore from "../../stores/updates";
 import logoIcon from "../../assets/logo.svg";
 import styles from "./Updates.module.scss";
 import ProgressBar from "../../components/Progress/ProgressBar/ProgressBar";
-import { Window } from "@tauri-apps/api/window";
+import { useNavigate } from "react-router-dom";
 
 const formatBytes = (bytes) => {
   if (bytes === 0) return "0 B";
@@ -15,25 +15,15 @@ const formatBytes = (bytes) => {
 
 const Updates = () => {
   const { errorMessage, checkForUpdates, downloadProgress, updateStatus, isUpdating } = useUpdateStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const updaterWindow = Window.getCurrent();
-
-    checkForUpdates().then(async (updateAvailable) => {
+    checkForUpdates().then((updateAvailable) => {
       if (!updateAvailable) {
-        try {
-          const authWindow = new Window("auth");
-          await authWindow.show();
-          await authWindow.unminimize();
-          await authWindow.setFocus();
-
-          await updaterWindow.close();
-        } catch (error) {
-          console.error("Error transitioning to auth window:", error);
-        }
+        navigate("/home");
       }
     });
-  }, [checkForUpdates]);
+  }, [checkForUpdates, navigate]);
 
   return (
     <main className={styles.updates}>
