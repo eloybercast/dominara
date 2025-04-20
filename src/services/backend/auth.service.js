@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Configure axios to include the token in requests
 const getAuthHeader = () => {
   const token = localStorage.getItem("token");
   return token ? { Authorization: `Bearer ${token}` } : {};
@@ -102,7 +101,6 @@ export const verifyEmail = async (code) => {
   try {
     const response = await axios.get(`${API_URL}/api/auth/verify-email?code=${code}`, { headers: getAuthHeader() });
 
-    // Update user in local storage
     const currentUser = getCurrentUser();
     if (currentUser) {
       const updatedUser = { ...currentUser, emailVerified: true };

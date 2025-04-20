@@ -20,7 +20,6 @@ const VerifyMail = () => {
     setVerificationCode(code);
     setDigitsFilled(code.length === 6);
 
-    // Automatically verify when 6 digits are entered
     if (code.length === 6) {
       handleVerifyEmail(code);
     }

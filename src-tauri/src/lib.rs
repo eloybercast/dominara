@@ -1,6 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use tauri_plugin_opener;
-use tauri_plugin_updater::UpdaterExt; // For updater functionality // For opener plugin
+use tauri_plugin_updater::UpdaterExt;
 
 async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
     if let Some(update) = app.updater()?.check().await? {
