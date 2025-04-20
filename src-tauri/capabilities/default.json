@@ -2,7 +2,11 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window, updater, and auth",
-  "windows": ["main", "updater", "auth"],
+  "windows": [
+    "main",
+    "updater",
+    "auth"
+  ],
   "permissions": [
     "core:default",
     "opener:default",
@@ -17,6 +21,7 @@
     "core:window:allow-close",
     "core:window:allow-set-size",
     "core:window:allow-center",
-    "core:window:allow-set-fullscreen"
+    "core:window:allow-set-fullscreen",
+    "deep-link:default"
   ]
 }

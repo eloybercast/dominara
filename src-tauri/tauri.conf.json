@@ -42,6 +42,11 @@
       "windows": {
         "installMode": "quiet"
       }
+    },
+    "deep-link": {
+      "desktop": {
+        "schemes": ["dominara"]
+      }
     }
   }
 }

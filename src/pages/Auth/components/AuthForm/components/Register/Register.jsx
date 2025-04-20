@@ -7,8 +7,8 @@ import { register, getGoogleAuthUrl } from "../../../../../../services/backend/a
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../../../../../utils/i18n";
 import { motion, AnimatePresence } from "framer-motion";
-import { onOpenUrl } from "@tauri-apps/plugin-deep-link";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import authHandlerService from "../../../../../../services/tauri/auth-handler.service";
 
 const Register = ({ onSuccess }) => {
   const navigate = useNavigate();
@@ -20,73 +20,32 @@ const Register = ({ onSuccess }) => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Listen for deep link callback events
+  // Setup authentication via deep links
   useEffect(() => {
-    let unlisten;
+    console.log("Register: Setting up auth handler listener");
 
-    const setupDeepLinkListener = async () => {
-      try {
-        unlisten = await onOpenUrl((urls) => {
-          if (urls && urls.length > 0) {
-            const url = urls[0];
-            console.log("Deep link received:", url);
+    // Register for authentication events
+    const unsubscribe = authHandlerService.onAuthenticated(({ userData }) => {
+      console.log("Register: Received authentication data", userData);
 
-            try {
-              // Parse the URL
-              const urlObj = new URL(url);
-              console.log("Parsed URL:", {
-                protocol: urlObj.protocol,
-                pathname: urlObj.pathname,
-                search: urlObj.search,
-                searchParams: Object.fromEntries(urlObj.searchParams.entries()),
-              });
+      // Update auth store with the user data
+      login(userData);
 
-              // Check if this is our auth callback
-              if (urlObj.protocol === "dominara:") {
-                const params = new URLSearchParams(urlObj.search);
-                const token = params.get("token");
-                const userStr = params.get("user");
-
-                console.log("Auth params:", { token: token ? "exists" : "missing", userStr: userStr || "missing" });
-
-                if (token && userStr) {
-                  // Store auth data
-                  localStorage.setItem("token", token);
-
-                  try {
-                    const userData = JSON.parse(decodeURIComponent(userStr));
-                    console.log("Parsed user data:", userData);
-                    localStorage.setItem("user", JSON.stringify(userData));
-
-                    // Update auth store and navigate
-                    login(userData);
-
-                    if (onSuccess && typeof onSuccess === "function") {
-                      onSuccess();
-                    } else {
-                      navigate("/");
-                    }
-                  } catch (err) {
-                    console.error("Error parsing user data:", err);
-                  }
-                }
-              }
-            } catch (err) {
-              console.error("Error processing deep link:", err);
-            } finally {
-              setIsLoading(false);
-            }
-          }
-        });
-      } catch (err) {
-        console.error("Failed to set up deep link listener:", err);
+      // Handle onSuccess callback or redirect
+      if (onSuccess && typeof onSuccess === "function") {
+        onSuccess();
+      } else {
+        navigate("/");
       }
-    };
 
-    setupDeepLinkListener();
+      // Reset loading state just in case
+      setIsLoading(false);
+    });
 
+    // Clean up on unmount
     return () => {
-      if (unlisten) unlisten();
+      console.log("Register: Cleaning up auth handler listener");
+      unsubscribe();
     };
   }, [login, navigate, onSuccess]);
 
@@ -151,12 +110,12 @@ const Register = ({ onSuccess }) => {
 
       // Get the Google Auth URL with proper parameters
       const googleAuthUrl = getGoogleAuthUrl();
-      console.log("Opening Google auth URL:", googleAuthUrl);
+      console.log("Register: Opening Google auth URL:", googleAuthUrl);
 
       // Open the URL in an external browser
       await openUrl(googleAuthUrl);
     } catch (error) {
-      console.error("Failed to open Google auth:", error);
+      console.error("Register: Failed to open Google auth:", error);
       setError(getErrorMessage({ code: "google_auth_error" }));
       setIsLoading(false);
     }

@@ -6,10 +6,24 @@ import Auth from "./pages/Auth/Auth";
 import AuthCallback from "./pages/AuthCallback/AuthCallback";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { clearAllCaches } from "./stores";
+import { deepLinkService } from "./services/tauri";
 
 const App = () => {
   useEffect(() => {
+    // Clear caches
     clearAllCaches();
+
+    // Initialize deep link service
+    console.log("App: Initializing deep link service");
+    deepLinkService.init().catch((error) => {
+      console.error("App: Failed to initialize deep link service", error);
+    });
+
+    // Cleanup on unmount (though this shouldn't happen for the main App component)
+    return () => {
+      console.log("App: Cleaning up deep link service");
+      deepLinkService.cleanup();
+    };
   }, []);
 
   return (
