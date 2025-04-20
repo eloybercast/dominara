@@ -22,6 +22,9 @@ const Login = () => {
   useEffect(() => {
     console.log("Login: Setting up auth handler listener");
 
+    // Initialize the auth handler service
+    authHandlerService.init();
+
     // Register for authentication events
     const unsubscribe = authHandlerService.onAuthenticated(({ userData }) => {
       console.log("Login: Received authentication data", userData);
@@ -86,6 +89,9 @@ const Login = () => {
 
       // Open the URL in an external browser
       await openUrl(googleAuthUrl);
+
+      // Note: We don't reset isLoading here because we're waiting for the deep link callback
+      // The loading state will be reset when the auth handler receives the callback
     } catch (error) {
       console.error("Login: Failed to open Google auth:", error);
       setError(getErrorMessage({ code: "google_auth_error" }));

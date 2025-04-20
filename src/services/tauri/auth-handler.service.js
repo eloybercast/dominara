@@ -41,7 +41,7 @@ class AuthHandlerService {
       return;
     }
 
-    console.log("AuthHandlerService: Processing auth data from deep link");
+    console.log("AuthHandlerService: Processing auth data from deep link", authData);
 
     // Save to localStorage
     localStorage.setItem("token", authData.token);
@@ -57,6 +57,7 @@ class AuthHandlerService {
    * @private
    */
   notifyCallbacks(authData) {
+    console.log(`AuthHandlerService: Notifying ${this.authCallbacks.length} callbacks about auth data`);
     this.authCallbacks.forEach((callback) => {
       try {
         callback(authData);
@@ -73,9 +74,7 @@ class AuthHandlerService {
    */
   onAuthenticated(callback) {
     // Initialize on first subscription
-    if (!this.unlisten) {
-      this.init();
-    }
+    this.init();
 
     this.authCallbacks.push(callback);
     console.log(`AuthHandlerService: Added auth callback, total: ${this.authCallbacks.length}`);

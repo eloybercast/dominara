@@ -178,7 +178,7 @@ export const processGoogleAuth = async (code) => {
  */
 export const getGoogleAuthUrl = () => {
   // Ensure we have all necessary parameters for desktop app detection
-  return `https://dominara-backend.vercel.app/api/auth/google?redirect_uri=${encodeURIComponent(
+  return `${API_URL}/api/auth/google?redirect_uri=${encodeURIComponent(
     "dominara://auth/callback"
   )}&client=desktop&platform=app&mobile=true`;
 };

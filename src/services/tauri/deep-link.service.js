@@ -126,10 +126,12 @@ class DeepLinkService {
     const params = new URLSearchParams(url.search);
     const token = params.get("token");
     const userStr = params.get("user");
+    const verified = params.get("verified");
 
     console.log("DeepLinkService: Auth params:", {
       token: token ? "exists" : "missing",
       userStr: userStr ? "exists" : "missing",
+      verified: verified || "missing",
     });
 
     if (!token || !userStr) {
@@ -139,7 +141,11 @@ class DeepLinkService {
 
     try {
       const userData = JSON.parse(decodeURIComponent(userStr));
-      return { token, userData };
+      return {
+        token,
+        userData,
+        verified: verified === "true",
+      };
     } catch (error) {
       console.error("DeepLinkService: Failed to parse user data", error);
       return null;

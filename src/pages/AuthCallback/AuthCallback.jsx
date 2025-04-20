@@ -15,6 +15,7 @@ const AuthCallback = () => {
     const params = new URLSearchParams(location.search);
     const token = params.get("token");
     const userDataStr = params.get("user");
+    const verified = params.get("verified");
 
     if (token && userDataStr) {
       try {
@@ -32,8 +33,13 @@ const AuthCallback = () => {
 
         console.log("AuthCallback: Successfully logged in, navigating to home");
 
-        // Navigate to home page
-        navigate("/");
+        // If the user was just verified, navigate to a different page (optional)
+        if (verified === "true") {
+          navigate("/?verified=true");
+        } else {
+          // Navigate to home page
+          navigate("/");
+        }
       } catch (error) {
         console.error("AuthCallback: Error parsing user data:", error);
         navigate("/auth?error=invalid_response");
