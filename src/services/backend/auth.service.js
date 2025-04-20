@@ -145,6 +145,44 @@ export const getToken = () => {
   return localStorage.getItem("token");
 };
 
+/**
+ * Process Google OAuth callback
+ * @param {string} code - Authorization code from Google
+ * @returns {Promise} - Promise with user data and token
+ */
+export const processGoogleAuth = async (code) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/auth/google/callback`, { code });
+
+    if (response.data.token) {
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+    }
+
+    return response.data;
+  } catch (error) {
+    const errorCode = error.response?.data?.code || null;
+    const errorMessage = error.response?.data?.message || "Google authentication failed";
+
+    throw {
+      code: errorCode,
+      message: errorMessage,
+      status: error.response?.status,
+    };
+  }
+};
+
+/**
+ * Get Google OAuth URL
+ * @returns {string} Google authentication URL
+ */
+export const getGoogleAuthUrl = () => {
+  // Ensure we have all necessary parameters for desktop app detection
+  return `https://dominara-backend.vercel.app/api/auth/google?redirect_uri=${encodeURIComponent(
+    "dominara://auth/callback"
+  )}&client=desktop&platform=app&mobile=true`;
+};
+
 const authService = {
   register,
   login,
@@ -153,6 +191,8 @@ const authService = {
   getToken,
   sendVerificationEmail,
   verifyEmail,
+  getGoogleAuthUrl,
+  processGoogleAuth,
 };
 
 export default authService;

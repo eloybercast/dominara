@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Updates from "./pages/Updates/Updates";
 import Auth from "./pages/Auth/Auth";
+import AuthCallback from "./pages/AuthCallback/AuthCallback";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { clearAllCaches } from "./stores";
 
@@ -15,6 +16,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/auth" element={<Auth />} />
+        <Route path="/auth-callback" element={<AuthCallback />} />
         <Route path="/home" element={<Home />} />
 
         <Route element={<ProtectedRoute />}>
