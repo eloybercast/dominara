@@ -17,6 +17,7 @@ const Login = () => {
   const [password, setPassword] = useState(formData.password);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [debugInfo, setDebugInfo] = useState("");
 
   // Setup deep link handler
   useEffect(() => {
@@ -29,23 +30,33 @@ const Login = () => {
       .then((urls) => {
         if (urls && urls.length > 0) {
           console.log("Login: Processing deep link from startup:", urls[0]);
+          setDebugInfo(`Login: Processing deep link from startup: ${urls[0]}`);
           handleDeepLink(urls[0]);
+        } else {
+          setDebugInfo("Login: No deep links at startup");
         }
       })
       .catch((err) => {
-        console.error("Login: Failed to get current deep link:", err);
+        const errorMsg = `Login: Failed to get current deep link: ${err.message || err}`;
+        console.error(errorMsg);
+        setDebugInfo(errorMsg);
       });
 
     // Listen for future deep links
     onOpenUrl((url) => {
-      console.log("Login: Received deep link:", url);
+      const msg = `Login: Received deep link: ${url}`;
+      console.log(msg);
+      setDebugInfo(msg);
       handleDeepLink(url);
     })
       .then((unlistenFn) => {
         unlisten = unlistenFn;
+        setDebugInfo((prev) => `${prev}\nDeep link listener registered successfully`);
       })
       .catch((err) => {
-        console.error("Login: Failed to set up deep link listener:", err);
+        const errorMsg = `Login: Failed to set up deep link listener: ${err.message || err}`;
+        console.error(errorMsg);
+        setDebugInfo(errorMsg);
       });
 
     // Clean up on unmount
@@ -59,18 +70,27 @@ const Login = () => {
   const handleDeepLink = async (url) => {
     try {
       console.log("Login: Processing deep link for auth");
+      setDebugInfo((prev) => `${prev}\nProcessing deep link: ${url}`);
       setIsLoading(true);
 
       const result = await processDeepLink(url);
 
       if (result.success && result.user) {
         console.log("Login: Deep link authentication successful");
+        setDebugInfo((prev) => `${prev}\nAuthentication successful: ${JSON.stringify(result.user)}`);
         loginStore(result.user);
         navigate("/");
+      } else {
+        setDebugInfo((prev) => `${prev}\nInvalid result from processDeepLink: ${JSON.stringify(result)}`);
       }
     } catch (error) {
-      console.error("Login: Deep link authentication failed:", error);
-      setError(getErrorMessage({ code: "auth_deep_link_error" }) || "Authentication failed");
+      const errorMsg = `Login: Deep link authentication failed: ${error.message || JSON.stringify(error)}`;
+      console.error(errorMsg);
+      setDebugInfo((prev) => `${prev}\n${errorMsg}`);
+      setError(
+        getErrorMessage({ code: "auth_deep_link_error" }) ||
+          `Error de autenticación: ${error.message || JSON.stringify(error)}`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -116,6 +136,7 @@ const Login = () => {
       // Get the Google Auth URL with proper parameters
       const googleAuthUrl = getGoogleAuthUrl();
       console.log("Login: Opening Google auth URL:", googleAuthUrl);
+      setDebugInfo(`Opening Google Auth URL: ${googleAuthUrl}`);
 
       // Open the URL in an external browser
       await openUrl(googleAuthUrl);
@@ -144,6 +165,25 @@ const Login = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {debugInfo && (
+        <div
+          style={{
+            fontSize: "10px",
+            fontFamily: "monospace",
+            padding: "5px",
+            margin: "5px 0",
+            backgroundColor: "rgba(0,0,0,0.1)",
+            color: "#333",
+            maxHeight: "100px",
+            overflow: "auto",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          <strong>Debug:</strong>
+          <pre>{debugInfo}</pre>
+        </div>
+      )}
 
       <input
         className={styles.login__input}

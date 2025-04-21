@@ -15,10 +15,12 @@ const VerifyMail = () => {
   const [isResending, setIsResending] = useState(false);
   const [digitsFilled, setDigitsFilled] = useState(false);
   const [error, setError] = useState("");
+  const [debugInfo, setDebugInfo] = useState("");
 
   // Handle deep links for email verification
   useEffect(() => {
     console.log("VerifyMail: Setting up deep link handler");
+    setDebugInfo("VerifyMail: Setting up deep link handler");
 
     let unlisten = () => {};
 
@@ -27,23 +29,33 @@ const VerifyMail = () => {
       .then((urls) => {
         if (urls && urls.length > 0) {
           console.log("VerifyMail: Processing deep link from startup:", urls[0]);
+          setDebugInfo((prev) => `${prev}\nDeep link at startup: ${urls[0]}`);
           handleDeepLink(urls[0]);
+        } else {
+          setDebugInfo((prev) => `${prev}\nNo deep links at startup`);
         }
       })
       .catch((err) => {
-        console.error("VerifyMail: Failed to get current deep link:", err);
+        const errorMsg = `VerifyMail: Failed to get current deep link: ${err.message || JSON.stringify(err)}`;
+        console.error(errorMsg);
+        setDebugInfo((prev) => `${prev}\n${errorMsg}`);
       });
 
     // Listen for future deep links
     onOpenUrl((url) => {
-      console.log("VerifyMail: Received deep link:", url);
+      const msg = `VerifyMail: Received deep link: ${url}`;
+      console.log(msg);
+      setDebugInfo((prev) => `${prev}\n${msg}`);
       handleDeepLink(url);
     })
       .then((unlistenFn) => {
         unlisten = unlistenFn;
+        setDebugInfo((prev) => `${prev}\nDeep link listener registered successfully`);
       })
       .catch((err) => {
-        console.error("VerifyMail: Failed to set up deep link listener:", err);
+        const errorMsg = `VerifyMail: Failed to set up deep link listener: ${err.message || JSON.stringify(err)}`;
+        console.error(errorMsg);
+        setDebugInfo((prev) => `${prev}\n${errorMsg}`);
       });
 
     // Clean up on unmount
@@ -56,11 +68,15 @@ const VerifyMail = () => {
   // Process deep links
   const handleDeepLink = async (url) => {
     try {
+      setDebugInfo((prev) => `${prev}\nProcessing deep link: ${url}`);
+
       // Parse the URL
       const parsedUrl = new URL(url);
+      setDebugInfo((prev) => `${prev}\nParsed URL: ${parsedUrl}`);
 
       // Check if this is a verification link
       const code = parsedUrl.searchParams.get("code");
+      setDebugInfo((prev) => `${prev}\nVerification code in URL: ${code || "none"}`);
 
       if (code) {
         console.log("VerifyMail: Found verification code in deep link:", code);
@@ -69,21 +85,36 @@ const VerifyMail = () => {
       } else {
         // If no verification code but has token, process as auth
         const token = parsedUrl.searchParams.get("token");
+        setDebugInfo((prev) => `${prev}\nToken in URL: ${token ? "present" : "none"}`);
+
         if (token) {
           console.log("VerifyMail: Found auth token in deep link");
           setIsLoading(true);
 
-          const result = await processDeepLink(url);
+          try {
+            const result = await processDeepLink(url);
+            setDebugInfo((prev) => `${prev}\nDeep link authentication result: ${JSON.stringify(result)}`);
 
-          if (result.success && result.user) {
-            login(result.user);
-            navigate("/");
+            if (result.success && result.user) {
+              login(result.user);
+              navigate("/");
+            } else {
+              setDebugInfo((prev) => `${prev}\nInvalid result from processDeepLink: ${JSON.stringify(result)}`);
+            }
+          } catch (authError) {
+            const errorMsg = `Deep link auth error: ${authError.message || JSON.stringify(authError)}`;
+            console.error(errorMsg);
+            setDebugInfo((prev) => `${prev}\n${errorMsg}`);
+            throw authError; // Re-throw to be caught by outer catch
           }
+        } else {
+          setDebugInfo((prev) => `${prev}\nNo code or token found in URL`);
         }
       }
     } catch (error) {
       console.error("VerifyMail: Deep link processing failed:", error);
-      setError(getErrorMessage({ code: "deep_link_error" }) || "Failed to process link");
+      setDebugInfo((prev) => `${prev}\nProcessing error: ${error.message || JSON.stringify(error)}`);
+      setError(getErrorMessage({ code: "deep_link_error" }) || `Error: ${error.message || JSON.stringify(error)}`);
       setIsLoading(false);
     }
   };
@@ -103,9 +134,12 @@ const VerifyMail = () => {
 
     try {
       setIsResending(true);
+      setDebugInfo((prev) => `${prev}\nSending verification email to ${user?.email || "unknown"}`);
       await sendVerificationEmail();
+      setDebugInfo((prev) => `${prev}\nVerification email sent successfully`);
     } catch (error) {
       console.error("Failed to send verification email:", error);
+      setDebugInfo((prev) => `${prev}\nFailed to send verification email: ${error.message || JSON.stringify(error)}`);
       setError(getErrorMessage(error));
     } finally {
       setTimeout(() => {
@@ -117,13 +151,16 @@ const VerifyMail = () => {
   const handleVerifyEmail = async (code = verificationCode) => {
     try {
       setIsLoading(true);
+      setDebugInfo((prev) => `${prev}\nVerifying email with code: ${code}`);
       await verifyEmail(code);
+      setDebugInfo((prev) => `${prev}\nEmail verification successful`);
 
       setTimeout(() => {
         navigate("/");
       }, 1500);
     } catch (error) {
       console.error("Failed to verify email:", error);
+      setDebugInfo((prev) => `${prev}\nVerification failed: ${error.message || JSON.stringify(error)}`);
       setError(getErrorMessage(error));
     } finally {
       setIsLoading(false);
@@ -155,6 +192,25 @@ const VerifyMail = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {debugInfo && (
+        <div
+          style={{
+            fontSize: "10px",
+            fontFamily: "monospace",
+            padding: "5px",
+            margin: "5px 0",
+            backgroundColor: "rgba(0,0,0,0.1)",
+            color: "#333",
+            maxHeight: "100px",
+            overflow: "auto",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          <strong>Debug:</strong>
+          <pre>{debugInfo}</pre>
+        </div>
+      )}
 
       <div className={styles.verifyMail__form}>
         <input
