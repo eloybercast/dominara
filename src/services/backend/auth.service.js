@@ -79,10 +79,37 @@ export const login = async (email, password) => {
 export const processDeepLink = async (url) => {
   try {
     const parsedUrl = new URL(url);
+
+    // Obtener token directamente de los parámetros de la URL
     const token = parsedUrl.searchParams.get("token");
 
-    if (token) {
-      // Set the token in localStorage
+    // Obtener el objeto usuario serializado de los parámetros de la URL
+    const userJson = parsedUrl.searchParams.get("user");
+
+    console.log("Deep link processing - token:", token);
+    console.log("Deep link processing - user JSON:", userJson);
+
+    if (token && userJson) {
+      try {
+        // Parsear el objeto usuario
+        const userData = JSON.parse(userJson);
+        console.log("Deep link processing - parsed user data:", userData);
+
+        // Almacenar token y datos del usuario en localStorage
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", userJson);
+
+        return {
+          success: true,
+          user: userData,
+          token,
+        };
+      } catch (jsonError) {
+        console.error("Error parsing user JSON from deep link:", jsonError);
+        throw new Error("Invalid user data format in deep link");
+      }
+    } else if (token) {
+      // Si solo tenemos token pero no tenemos datos de usuario, los obtenemos
       localStorage.setItem("token", token);
 
       // Fetch user info with the token
@@ -100,12 +127,12 @@ export const processDeepLink = async (url) => {
       }
     }
 
-    throw new Error("Invalid token in deep link");
+    throw new Error("Invalid token or user data in deep link");
   } catch (error) {
     console.error("Deep link processing error:", error);
     throw {
       code: "DEEP_LINK_ERROR",
-      message: "Failed to process authentication from deep link",
+      message: `Failed to process authentication from deep link: ${error.message || "Unknown error"}`,
       status: error.response?.status,
     };
   }

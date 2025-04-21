@@ -76,40 +76,76 @@ const VerifyMail = () => {
 
       // Check if this is a verification link
       const code = parsedUrl.searchParams.get("code");
+      const verified = parsedUrl.searchParams.get("verified");
       setDebugInfo((prev) => `${prev}\nVerification code in URL: ${code || "none"}`);
+      setDebugInfo((prev) => `${prev}\nVerified flag in URL: ${verified || "none"}`);
+
+      // Para los enlaces de verificación de email, tendremos los parámetros 'token' y 'user'
+      // como parte de la URL cuando regresamos del backend después de verificar el correo
+      const token = parsedUrl.searchParams.get("token");
+      const userJson = parsedUrl.searchParams.get("user");
+
+      setDebugInfo((prev) => `${prev}\nToken in URL: ${token ? "present" : "none"}`);
+      setDebugInfo((prev) => `${prev}\nUser data in URL: ${userJson ? "present" : "none"}`);
+
+      if (token && userJson) {
+        try {
+          // Procesamos el deep link para autenticación automática
+          setIsLoading(true);
+
+          // Intenta parsear los datos del usuario
+          const userData = JSON.parse(userJson);
+          setDebugInfo((prev) => `${prev}\nParsed user data: ${JSON.stringify(userData)}`);
+
+          // Almacena los datos de autenticación directamente
+          localStorage.setItem("token", token);
+          localStorage.setItem("user", userJson);
+
+          // Actualiza el estado de autenticación
+          login(userData);
+
+          // Si el email fue verificado, redirigimos a la página principal
+          if (verified === "true" || (userData && userData.emailVerified)) {
+            setDebugInfo((prev) => `${prev}\nEmail verified, redirecting to home`);
+            setTimeout(() => {
+              navigate("/");
+            }, 1500);
+          }
+
+          return;
+        } catch (parseError) {
+          setDebugInfo((prev) => `${prev}\nFailed to parse user data: ${parseError.message}`);
+          throw parseError;
+        }
+      }
 
       if (code) {
         console.log("VerifyMail: Found verification code in deep link:", code);
         setVerificationCode(code);
         handleVerifyEmail(code);
-      } else {
-        // If no verification code but has token, process as auth
-        const token = parsedUrl.searchParams.get("token");
-        setDebugInfo((prev) => `${prev}\nToken in URL: ${token ? "present" : "none"}`);
+      } else if (token) {
+        // Si solo hay token pero no datos de usuario, procesamos con la API
+        console.log("VerifyMail: Found auth token in deep link");
+        setIsLoading(true);
 
-        if (token) {
-          console.log("VerifyMail: Found auth token in deep link");
-          setIsLoading(true);
+        try {
+          const result = await processDeepLink(url);
+          setDebugInfo((prev) => `${prev}\nDeep link authentication result: ${JSON.stringify(result)}`);
 
-          try {
-            const result = await processDeepLink(url);
-            setDebugInfo((prev) => `${prev}\nDeep link authentication result: ${JSON.stringify(result)}`);
-
-            if (result.success && result.user) {
-              login(result.user);
-              navigate("/");
-            } else {
-              setDebugInfo((prev) => `${prev}\nInvalid result from processDeepLink: ${JSON.stringify(result)}`);
-            }
-          } catch (authError) {
-            const errorMsg = `Deep link auth error: ${authError.message || JSON.stringify(authError)}`;
-            console.error(errorMsg);
-            setDebugInfo((prev) => `${prev}\n${errorMsg}`);
-            throw authError; // Re-throw to be caught by outer catch
+          if (result.success && result.user) {
+            login(result.user);
+            navigate("/");
+          } else {
+            setDebugInfo((prev) => `${prev}\nInvalid result from processDeepLink: ${JSON.stringify(result)}`);
           }
-        } else {
-          setDebugInfo((prev) => `${prev}\nNo code or token found in URL`);
+        } catch (authError) {
+          const errorMsg = `Deep link auth error: ${authError.message || JSON.stringify(authError)}`;
+          console.error(errorMsg);
+          setDebugInfo((prev) => `${prev}\n${errorMsg}`);
+          throw authError; // Re-throw to be caught by outer catch
         }
+      } else {
+        setDebugInfo((prev) => `${prev}\nNo code or token found in URL`);
       }
     } catch (error) {
       console.error("VerifyMail: Deep link processing failed:", error);

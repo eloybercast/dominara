@@ -138,6 +138,14 @@ const Login = () => {
       console.log("Login: Opening Google auth URL:", googleAuthUrl);
       setDebugInfo(`Opening Google Auth URL: ${googleAuthUrl}`);
 
+      // Verificar que la URL es válida
+      if (!googleAuthUrl || googleAuthUrl.includes("undefined")) {
+        const errorMsg = `URL de autenticación mal formada: ${googleAuthUrl}`;
+        console.error(errorMsg);
+        setDebugInfo((prev) => `${prev}\n${errorMsg}`);
+        throw new Error(errorMsg);
+      }
+
       // Open the URL in an external browser
       await openUrl(googleAuthUrl);
 
@@ -145,7 +153,10 @@ const Login = () => {
       // The loading state will be reset when the deep link handler receives the callback
     } catch (error) {
       console.error("Login: Failed to open Google auth:", error);
-      setError(getErrorMessage({ code: "google_auth_error" }));
+      const errorDetails = error.message || JSON.stringify(error);
+      const errorMsg = `Error al abrir autenticación de Google: ${errorDetails}`;
+      setDebugInfo((prev) => `${prev}\n${errorMsg}`);
+      setError(errorMsg);
       setIsLoading(false);
     }
   };
