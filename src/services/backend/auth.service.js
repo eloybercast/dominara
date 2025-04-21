@@ -72,6 +72,46 @@ export const login = async (email, password) => {
 };
 
 /**
+ * Process deep link callback with token
+ * @param {string} url - Deep link URL containing token
+ * @returns {Object} - User data and authentication status
+ */
+export const processDeepLink = async (url) => {
+  try {
+    const parsedUrl = new URL(url);
+    const token = parsedUrl.searchParams.get("token");
+
+    if (token) {
+      // Set the token in localStorage
+      localStorage.setItem("token", token);
+
+      // Fetch user info with the token
+      const response = await axios.get(`${API_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.user) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        return {
+          success: true,
+          user: response.data.user,
+          token,
+        };
+      }
+    }
+
+    throw new Error("Invalid token in deep link");
+  } catch (error) {
+    console.error("Deep link processing error:", error);
+    throw {
+      code: "DEEP_LINK_ERROR",
+      message: "Failed to process authentication from deep link",
+      status: error.response?.status,
+    };
+  }
+};
+
+/**
  * Send verification email to current user
  * @returns {Promise} - Promise with success message or error
  */
@@ -177,7 +217,7 @@ export const processGoogleAuth = async (code) => {
  * @returns {string} Google authentication URL
  */
 export const getGoogleAuthUrl = () => {
-  // Ensure we have all necessary parameters for desktop app detection
+  // Use dominara:// scheme for Tauri deep linking
   return `${API_URL}/api/auth/google?redirect_uri=${encodeURIComponent(
     "dominara://auth/callback"
   )}&client=desktop&platform=app&mobile=true`;
@@ -193,6 +233,7 @@ const authService = {
   verifyEmail,
   getGoogleAuthUrl,
   processGoogleAuth,
+  processDeepLink,
 };
 
 export default authService;

@@ -1,4 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use tauri::Builder;
+use tauri_plugin_deep_link;
 use tauri_plugin_opener;
 use tauri_plugin_updater::UpdaterExt;
 
@@ -27,13 +29,12 @@ async fn update(app: tauri::AppHandle) -> tauri_plugin_updater::Result<()> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let mut builder = tauri::Builder::default();
+    let mut builder = Builder::default();
 
     #[cfg(desktop)]
     {
         builder = builder.plugin(tauri_plugin_single_instance::init(|_app, argv, _cwd| {
           println!("a new app instance was opened with {argv:?} and the deep link event was already triggered");
-          // when defining deep link schemes at runtime, you must also check `argv` here
         }));
     }
     

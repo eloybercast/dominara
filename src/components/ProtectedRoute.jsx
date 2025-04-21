@@ -8,13 +8,18 @@ import useAuthStore from "../stores/auth";
  */
 const ProtectedRoute = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    // First try to initialize auth from localStorage
+    const authInitialized = initializeAuth();
+
+    // If still not authenticated, redirect to auth page
+    if (!authInitialized && !isAuthenticated) {
       navigate("/auth");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, initializeAuth, navigate]);
 
   return isAuthenticated ? <Outlet /> : null;
 };

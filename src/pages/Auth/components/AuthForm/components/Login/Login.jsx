@@ -3,12 +3,12 @@ import styles from "./Login.module.scss";
 import googleIcon from "../../../../../../assets/icons/google.svg";
 import playIcon from "../../../../../../assets/icons/play.svg";
 import useAuthStore from "../../../../../../stores/auth";
-import { login, getGoogleAuthUrl } from "../../../../../../services/backend/auth.service";
+import { login, getGoogleAuthUrl, processDeepLink } from "../../../../../../services/backend/auth.service";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../../../../../utils/i18n";
 import { motion, AnimatePresence } from "framer-motion";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import authHandlerService from "../../../../../../services/tauri/auth-handler.service";
+import { getCurrent, onOpenUrl } from "@tauri-apps/plugin-deep-link";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,33 +18,63 @@ const Login = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Setup authentication via deep links
+  // Setup deep link handler
   useEffect(() => {
-    console.log("Login: Setting up auth handler listener");
+    console.log("Login: Setting up deep link handler");
 
-    // Initialize the auth handler service
-    authHandlerService.init();
+    let unlisten = () => {};
 
-    // Register for authentication events
-    const unsubscribe = authHandlerService.onAuthenticated(({ userData }) => {
-      console.log("Login: Received authentication data", userData);
+    // Check if app was opened with a deep link
+    getCurrent()
+      .then((urls) => {
+        if (urls && urls.length > 0) {
+          console.log("Login: Processing deep link from startup:", urls[0]);
+          handleDeepLink(urls[0]);
+        }
+      })
+      .catch((err) => {
+        console.error("Login: Failed to get current deep link:", err);
+      });
 
-      // Update auth store with the user data
-      loginStore(userData);
-
-      // Navigate to home
-      navigate("/");
-
-      // Reset loading state just in case
-      setIsLoading(false);
-    });
+    // Listen for future deep links
+    onOpenUrl((url) => {
+      console.log("Login: Received deep link:", url);
+      handleDeepLink(url);
+    })
+      .then((unlistenFn) => {
+        unlisten = unlistenFn;
+      })
+      .catch((err) => {
+        console.error("Login: Failed to set up deep link listener:", err);
+      });
 
     // Clean up on unmount
     return () => {
-      console.log("Login: Cleaning up auth handler listener");
-      unsubscribe();
+      console.log("Login: Cleaning up deep link listener");
+      unlisten();
     };
-  }, [loginStore, navigate]);
+  }, []);
+
+  // Handle deep link authentication
+  const handleDeepLink = async (url) => {
+    try {
+      console.log("Login: Processing deep link for auth");
+      setIsLoading(true);
+
+      const result = await processDeepLink(url);
+
+      if (result.success && result.user) {
+        console.log("Login: Deep link authentication successful");
+        loginStore(result.user);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Login: Deep link authentication failed:", error);
+      setError(getErrorMessage({ code: "auth_deep_link_error" }) || "Authentication failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChangeEmail = (e) => {
     const value = e.target.value;
@@ -91,7 +121,7 @@ const Login = () => {
       await openUrl(googleAuthUrl);
 
       // Note: We don't reset isLoading here because we're waiting for the deep link callback
-      // The loading state will be reset when the auth handler receives the callback
+      // The loading state will be reset when the deep link handler receives the callback
     } catch (error) {
       console.error("Login: Failed to open Google auth:", error);
       setError(getErrorMessage({ code: "google_auth_error" }));

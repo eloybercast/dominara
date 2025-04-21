@@ -3,12 +3,12 @@ import styles from "./Register.module.scss";
 import googleIcon from "../../../../../../assets/icons/google.svg";
 import playIcon from "../../../../../../assets/icons/play.svg";
 import useAuthStore from "../../../../../../stores/auth";
-import { register, getGoogleAuthUrl } from "../../../../../../services/backend/auth.service";
+import { register, getGoogleAuthUrl, processDeepLink } from "../../../../../../services/backend/auth.service";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../../../../../utils/i18n";
 import { motion, AnimatePresence } from "framer-motion";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import authHandlerService from "../../../../../../services/tauri/auth-handler.service";
+import { getCurrent, onOpenUrl } from "@tauri-apps/plugin-deep-link";
 
 const Register = ({ onSuccess }) => {
   const navigate = useNavigate();
@@ -20,34 +20,69 @@ const Register = ({ onSuccess }) => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Setup authentication via deep links
+  // Setup deep link handler
   useEffect(() => {
-    console.log("Register: Setting up auth handler listener");
+    console.log("Register: Setting up deep link handler");
 
-    // Register for authentication events
-    const unsubscribe = authHandlerService.onAuthenticated(({ userData }) => {
-      console.log("Register: Received authentication data", userData);
+    let unlisten = () => {};
 
-      // Update auth store with the user data
-      login(userData);
+    // Check if app was opened with a deep link
+    getCurrent()
+      .then((urls) => {
+        if (urls && urls.length > 0) {
+          console.log("Register: Processing deep link from startup:", urls[0]);
+          handleDeepLink(urls[0]);
+        }
+      })
+      .catch((err) => {
+        console.error("Register: Failed to get current deep link:", err);
+      });
 
-      // Handle onSuccess callback or redirect
-      if (onSuccess && typeof onSuccess === "function") {
-        onSuccess();
-      } else {
-        navigate("/");
-      }
-
-      // Reset loading state just in case
-      setIsLoading(false);
-    });
+    // Listen for future deep links
+    onOpenUrl((url) => {
+      console.log("Register: Received deep link:", url);
+      handleDeepLink(url);
+    })
+      .then((unlistenFn) => {
+        unlisten = unlistenFn;
+      })
+      .catch((err) => {
+        console.error("Register: Failed to set up deep link listener:", err);
+      });
 
     // Clean up on unmount
     return () => {
-      console.log("Register: Cleaning up auth handler listener");
-      unsubscribe();
+      console.log("Register: Cleaning up deep link listener");
+      unlisten();
     };
-  }, [login, navigate, onSuccess]);
+  }, []);
+
+  // Handle deep link authentication
+  const handleDeepLink = async (url) => {
+    try {
+      console.log("Register: Processing deep link for auth");
+      setIsLoading(true);
+
+      const result = await processDeepLink(url);
+
+      if (result.success && result.user) {
+        console.log("Register: Deep link authentication successful");
+        login(result.user);
+
+        // Handle onSuccess callback or redirect
+        if (onSuccess && typeof onSuccess === "function") {
+          onSuccess();
+        } else {
+          navigate("/");
+        }
+      }
+    } catch (error) {
+      console.error("Register: Deep link authentication failed:", error);
+      setError(getErrorMessage({ code: "auth_deep_link_error" }) || "Authentication failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChangeUsername = (e) => {
     const value = e.target.value;
@@ -114,6 +149,9 @@ const Register = ({ onSuccess }) => {
 
       // Open the URL in an external browser
       await openUrl(googleAuthUrl);
+
+      // Note: We don't reset isLoading here because we're waiting for the deep link callback
+      // The loading state will be reset when the deep link handler receives the callback
     } catch (error) {
       console.error("Register: Failed to open Google auth:", error);
       setError(getErrorMessage({ code: "google_auth_error" }));

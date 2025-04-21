@@ -1,19 +1,92 @@
 import React, { useState, useEffect } from "react";
 import styles from "./VerifyMail.module.scss";
-import { sendVerificationEmail, verifyEmail } from "../../../../../../services/backend/auth.service";
+import { sendVerificationEmail, verifyEmail, processDeepLink } from "../../../../../../services/backend/auth.service";
 import { translate, getErrorMessage } from "../../../../../../utils/i18n";
 import useAuthStore from "../../../../../../stores/auth";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { getCurrent, onOpenUrl } from "@tauri-apps/plugin-deep-link";
 
 const VerifyMail = () => {
-  const { user } = useAuthStore();
+  const { user, login } = useAuthStore();
   const navigate = useNavigate();
   const [verificationCode, setVerificationCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [digitsFilled, setDigitsFilled] = useState(false);
   const [error, setError] = useState("");
+
+  // Handle deep links for email verification
+  useEffect(() => {
+    console.log("VerifyMail: Setting up deep link handler");
+
+    let unlisten = () => {};
+
+    // Check if app was opened with a deep link
+    getCurrent()
+      .then((urls) => {
+        if (urls && urls.length > 0) {
+          console.log("VerifyMail: Processing deep link from startup:", urls[0]);
+          handleDeepLink(urls[0]);
+        }
+      })
+      .catch((err) => {
+        console.error("VerifyMail: Failed to get current deep link:", err);
+      });
+
+    // Listen for future deep links
+    onOpenUrl((url) => {
+      console.log("VerifyMail: Received deep link:", url);
+      handleDeepLink(url);
+    })
+      .then((unlistenFn) => {
+        unlisten = unlistenFn;
+      })
+      .catch((err) => {
+        console.error("VerifyMail: Failed to set up deep link listener:", err);
+      });
+
+    // Clean up on unmount
+    return () => {
+      console.log("VerifyMail: Cleaning up deep link listener");
+      unlisten();
+    };
+  }, []);
+
+  // Process deep links
+  const handleDeepLink = async (url) => {
+    try {
+      // Parse the URL
+      const parsedUrl = new URL(url);
+
+      // Check if this is a verification link
+      const code = parsedUrl.searchParams.get("code");
+
+      if (code) {
+        console.log("VerifyMail: Found verification code in deep link:", code);
+        setVerificationCode(code);
+        handleVerifyEmail(code);
+      } else {
+        // If no verification code but has token, process as auth
+        const token = parsedUrl.searchParams.get("token");
+        if (token) {
+          console.log("VerifyMail: Found auth token in deep link");
+          setIsLoading(true);
+
+          const result = await processDeepLink(url);
+
+          if (result.success && result.user) {
+            login(result.user);
+            navigate("/");
+          }
+        }
+      }
+    } catch (error) {
+      console.error("VerifyMail: Deep link processing failed:", error);
+      setError(getErrorMessage({ code: "deep_link_error" }) || "Failed to process link");
+      setIsLoading(false);
+    }
+  };
 
   const handleCodeChange = (e) => {
     const code = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
