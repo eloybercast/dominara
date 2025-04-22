@@ -11,26 +11,7 @@ const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showVerification, setShowVerification] = useState(false);
   const [direction, setDirection] = useState(1);
-  const [consoleError, setConsoleError] = useState(null);
   const { user } = useAuthStore();
-
-  // Capturar errores de consola específicos del formulario
-  useEffect(() => {
-    const originalConsoleError = console.error;
-
-    console.error = (...args) => {
-      // Guardar el error para mostrarlo
-      const errorMessage = args.join(" ");
-      setConsoleError(errorMessage);
-      // Mantener la funcionalidad original
-      originalConsoleError.apply(console, args);
-    };
-
-    return () => {
-      // Restaurar console.error original al desmontar
-      console.error = originalConsoleError;
-    };
-  }, []);
 
   const toggleForm = () => {
     if (showVerification) {
@@ -93,28 +74,6 @@ const AuthForm = () => {
   return (
     <article className={styles.authForm}>
       <div className={styles.authForm__header}>{/** Logo */}</div>
-
-      {consoleError && (
-        <div
-          style={{
-            padding: "10px",
-            margin: "10px",
-            backgroundColor: "rgba(255,0,0,0.15)",
-            color: "red",
-            border: "1px solid red",
-            borderRadius: "4px",
-            fontFamily: "monospace",
-            fontSize: "11px",
-            maxHeight: "100px",
-            overflow: "auto",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-all",
-          }}
-        >
-          <strong>Error de consola:</strong>
-          <p>{consoleError}</p>
-        </div>
-      )}
 
       <div className={styles.authForm__content}>
         <div className={styles.authForm__toggle} onClick={toggleForm}>

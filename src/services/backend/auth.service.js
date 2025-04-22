@@ -80,22 +80,14 @@ export const processDeepLink = async (url) => {
   try {
     const parsedUrl = new URL(url);
 
-    // Obtener token directamente de los parámetros de la URL
     const token = parsedUrl.searchParams.get("token");
 
-    // Obtener el objeto usuario serializado de los parámetros de la URL
     const userJson = parsedUrl.searchParams.get("user");
-
-    console.log("Deep link processing - token:", token);
-    console.log("Deep link processing - user JSON:", userJson);
 
     if (token && userJson) {
       try {
-        // Parsear el objeto usuario
         const userData = JSON.parse(userJson);
-        console.log("Deep link processing - parsed user data:", userData);
 
-        // Almacenar token y datos del usuario en localStorage
         localStorage.setItem("token", token);
         localStorage.setItem("user", userJson);
 
@@ -109,10 +101,8 @@ export const processDeepLink = async (url) => {
         throw new Error("Invalid user data format in deep link");
       }
     } else if (token) {
-      // Si solo tenemos token pero no tenemos datos de usuario, los obtenemos
       localStorage.setItem("token", token);
 
-      // Fetch user info with the token
       const response = await axios.get(`${API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -244,7 +234,6 @@ export const processGoogleAuth = async (code) => {
  * @returns {string} Google authentication URL
  */
 export const getGoogleAuthUrl = () => {
-  // Use dominara:// scheme for Tauri deep linking
   return `${API_URL}/api/auth/google?redirect_uri=${encodeURIComponent(
     "dominara://auth/callback"
   )}&client=desktop&platform=app&mobile=true`;

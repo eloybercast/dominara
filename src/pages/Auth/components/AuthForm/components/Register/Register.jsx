@@ -19,86 +19,56 @@ const Register = ({ onSuccess }) => {
   const [repeatPassword, setRepeatPassword] = useState(formData.repeatPassword);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [debugInfo, setDebugInfo] = useState("");
 
-  // Setup deep link handler
   useEffect(() => {
-    console.log("Register: Setting up deep link handler");
 
     let unlisten = () => {};
 
-    // Check if app was opened with a deep link
     getCurrent()
       .then((urls) => {
         if (urls && urls.length > 0) {
-          console.log("Register: Processing deep link from startup:", urls[0]);
-          setDebugInfo(`Register: Deep link at startup: ${urls[0]}`);
           handleDeepLink(urls[0]);
-        } else {
-          setDebugInfo("Register: No deep links at startup");
         }
       })
       .catch((err) => {
-        const errorMsg = `Register: Failed to get current deep link: ${err.message || JSON.stringify(err)}`;
-        console.error(errorMsg);
-        setDebugInfo(errorMsg);
+        console.error(`Register: Failed to get current deep link: ${err.message || JSON.stringify(err)}`);
       });
 
-    // Listen for future deep links
     onOpenUrl((url) => {
-      const msg = `Register: Received deep link: ${url}`;
-      console.log(msg);
-      setDebugInfo((prev) => `${prev}\n${msg}`);
       handleDeepLink(url);
     })
       .then((unlistenFn) => {
         unlisten = unlistenFn;
-        setDebugInfo((prev) => `${prev}\nDeep link listener registered successfully`);
       })
       .catch((err) => {
-        const errorMsg = `Register: Deep link listener error: ${err.message || JSON.stringify(err)}`;
-        console.error(errorMsg);
-        setDebugInfo((prev) => `${prev}\n${errorMsg}`);
+        console.error(`Register: Deep link listener error: ${err.message || JSON.stringify(err)}`);
       });
 
-    // Clean up on unmount
     return () => {
-      console.log("Register: Cleaning up deep link listener");
       unlisten();
     };
   }, []);
 
-  // Handle deep link authentication
   const handleDeepLink = async (url) => {
     try {
-      console.log("Register: Processing deep link for auth");
-      setDebugInfo((prev) => `${prev}\nProcessing deep link: ${url}`);
       setIsLoading(true);
 
       const result = await processDeepLink(url);
-      setDebugInfo((prev) => `${prev}\nDeep link result: ${JSON.stringify(result)}`);
 
       if (result.success && result.user) {
-        console.log("Register: Deep link authentication successful");
-        setDebugInfo((prev) => `${prev}\nAuthentication successful: ${JSON.stringify(result.user)}`);
         login(result.user);
 
-        // Handle onSuccess callback or redirect
         if (onSuccess && typeof onSuccess === "function") {
           onSuccess();
         } else {
           navigate("/");
         }
-      } else {
-        setDebugInfo((prev) => `${prev}\nInvalid result from processDeepLink: ${JSON.stringify(result)}`);
       }
     } catch (error) {
-      const errorMsg = `Register: Deep link authentication failed: ${error.message || JSON.stringify(error)}`;
-      console.error(errorMsg);
-      setDebugInfo((prev) => `${prev}\n${errorMsg}`);
+      console.error(`Register: Deep link authentication failed: ${error.message || JSON.stringify(error)}`);
       setError(
         getErrorMessage({ code: "auth_deep_link_error" }) ||
-          `Error de autenticación: ${error.message || JSON.stringify(error)}`
+          `Authentication error: ${error.message || JSON.stringify(error)}`
       );
     } finally {
       setIsLoading(false);
@@ -164,29 +134,20 @@ const Register = ({ onSuccess }) => {
     try {
       setIsLoading(true);
 
-      // Get the Google Auth URL with proper parameters
       const googleAuthUrl = getGoogleAuthUrl();
-      console.log("Register: Opening Google auth URL:", googleAuthUrl);
-      setDebugInfo((prev) => `${prev}\nOpening Google Auth URL: ${googleAuthUrl}`);
 
-      // Verificar que la URL es válida
       if (!googleAuthUrl || googleAuthUrl.includes("undefined")) {
-        const errorMsg = `URL de autenticación mal formada: ${googleAuthUrl}`;
+        const errorMsg = `Malformed authentication URL: ${googleAuthUrl}`;
         console.error(errorMsg);
-        setDebugInfo((prev) => `${prev}\n${errorMsg}`);
         throw new Error(errorMsg);
       }
 
-      // Open the URL in an external browser
       await openUrl(googleAuthUrl);
 
-      // Note: We don't reset isLoading here because we're waiting for the deep link callback
-      // The loading state will be reset when the deep link handler receives the callback
     } catch (error) {
       console.error("Register: Failed to open Google auth:", error);
       const errorDetails = error.message || JSON.stringify(error);
-      const errorMsg = `Error al abrir autenticación de Google: ${errorDetails}`;
-      setDebugInfo((prev) => `${prev}\n${errorMsg}`);
+      const errorMsg = `Error opening Google authentication: ${errorDetails}`;
       setError(errorMsg);
       setIsLoading(false);
     }
@@ -207,25 +168,6 @@ const Register = ({ onSuccess }) => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {debugInfo && (
-        <div
-          style={{
-            fontSize: "10px",
-            fontFamily: "monospace",
-            padding: "5px",
-            margin: "5px 0",
-            backgroundColor: "rgba(0,0,0,0.1)",
-            color: "#333",
-            maxHeight: "100px",
-            overflow: "auto",
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          <strong>Debug:</strong>
-          <pre>{debugInfo}</pre>
-        </div>
-      )}
 
       <input
         className={styles.register__input}
