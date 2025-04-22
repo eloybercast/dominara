@@ -19,7 +19,7 @@ const Updates = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    resizeAndCenterWindow(500, 900).catch(err => {
+    resizeAndCenterWindow(300, 500).catch(err => {
       console.error("Failed to resize window:", err);
     });
 

@@ -17,8 +17,6 @@
         "resizable": false,
         "width": 900,
         "height": 500,
-        "minWidth": 1200,
-        "minHeight": 800,
         "visible": true,
         "url": "/"
       }

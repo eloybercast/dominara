@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { clearAllCaches } from "./stores";
 import { getCurrent } from "@tauri-apps/plugin-deep-link";
 import useAuthStore from "./stores/backend/auth";
@@ -14,7 +14,6 @@ const App = () => {
 
   useEffect(() => {
     clearAllCaches();
-
     initializeAuth();
 
     getCurrent().catch((err) => {
@@ -26,10 +25,10 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/auth" element={<Auth />} />
-        <Route path="/lobby" element={<Lobby />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Updates />} />
+          <Route path="/lobby" element={<Lobby />} />
         </Route>
       </Routes>
     </Router>

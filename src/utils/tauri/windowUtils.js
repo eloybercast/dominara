@@ -1,16 +1,16 @@
 import { Window } from "@tauri-apps/api/window";
 
 /**
- * Resizes the current application window
- * @param {number} width - Width in pixels
- * @param {number} height - Height in pixels
+ * Resizes the current application window using logical pixels
+ * @param {number} width - Width in logical pixels
+ * @param {number} height - Height in logical pixels
  * @returns {Promise<void>}
  */
 export const resizeWindow = async (width, height) => {
   try {
     const appWindow = Window.getCurrent();
     await appWindow.setSize({
-      type: "Physical",
+      type: "Logical",
       width,
       height,
     });
@@ -36,8 +36,8 @@ export const centerWindow = async () => {
 
 /**
  * Resizes and centers the window with a small delay between operations
- * @param {number} width - Width in pixels
- * @param {number} height - Height in pixels
+ * @param {number} width - Width in logical pixels
+ * @param {number} height - Height in logical pixels
  * @param {number} delay - Delay in ms between resize and center operations
  * @returns {Promise<void>}
  */
