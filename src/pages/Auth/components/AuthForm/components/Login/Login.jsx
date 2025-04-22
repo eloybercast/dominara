@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Login.module.scss";
 import googleIcon from "../../../../../../assets/icons/google.svg";
 import playIcon from "../../../../../../assets/icons/play.svg";
-import useAuthStore from "../../../../../../stores/auth";
+import useAuthStore from "../../../../../../stores/backend/auth";
 import { login, getGoogleAuthUrl, processDeepLink } from "../../../../../../services/backend/auth.service";
 import { useNavigate } from "react-router-dom";
 import { getErrorMessage } from "../../../../../../utils/i18n";

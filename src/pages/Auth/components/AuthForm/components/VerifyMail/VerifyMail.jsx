@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./VerifyMail.module.scss";
 import { sendVerificationEmail, verifyEmail, processDeepLink } from "../../../../../../services/backend/auth.service";
 import { translate, getErrorMessage } from "../../../../../../utils/i18n";
-import useAuthStore from "../../../../../../stores/auth";
+import useAuthStore from "../../../../../../stores/backend/auth";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { getCurrent, onOpenUrl } from "@tauri-apps/plugin-deep-link";
@@ -86,7 +86,7 @@ const VerifyMail = () => {
             navigate("/");
           }
         } catch (authError) {
-          throw authError; // Re-throw to be caught by outer catch
+          throw authError;
         }
       }
     } catch (error) {

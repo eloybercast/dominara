@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import useUpdateStore from "../../stores/updates";
+import useUpdateStore from "../../stores/tauri/updates";
 import logoIcon from "../../assets/logo.svg";
 import styles from "./Updates.module.scss";
 import ProgressBar from "../../components/Progress/ProgressBar/ProgressBar";
 import { useNavigate } from "react-router-dom";
+import { resizeAndCenterWindow } from "../../utils/tauri/windowUtils";
 
 const formatBytes = (bytes) => {
   if (bytes === 0) return "0 B";
@@ -18,6 +19,10 @@ const Updates = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    resizeAndCenterWindow(500, 900).catch(err => {
+      console.error("Failed to resize window:", err);
+    });
+
     checkForUpdates().then((updateAvailable) => {
       if (!updateAvailable) {
         navigate("/lobby");

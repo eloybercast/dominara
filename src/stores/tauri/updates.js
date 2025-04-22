@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import updateService from "../services/tauri/update.service";
+import updateService from "../../services/tauri/update.service";
 
 const useUpdateStore = create((set, get) => ({
   updateStatus: "",

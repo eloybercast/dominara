@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { clearAllCaches } from "./stores";
 import { getCurrent } from "@tauri-apps/plugin-deep-link";
-import useAuthStore from "./stores/auth";
+import useAuthStore from "./stores/backend/auth";
 
 import Lobby from "./pages/Lobby/Lobby";
 import Updates from "./pages/Updates/Updates";

@@ -58,3 +58,65 @@ export const resizeAndCenterWindow = async (width, height, delay = 100) => {
     console.error("Error resizing and centering window:", error);
   }
 };
+
+/**
+ * Sets the window to fullscreen mode
+ * @returns {Promise<void>}
+ */
+export const setFullscreen = async () => {
+  try {
+    const appWindow = Window.getCurrent();
+    
+    await appWindow.maximize();
+    
+    await appWindow.setFullscreen(true);
+    
+  } catch (error) {
+    console.error("Failed to set fullscreen mode:", error);
+    throw error;
+  }
+};
+
+/**
+ * Exits fullscreen mode if the window is currently in fullscreen
+ * @returns {Promise<void>}
+ */
+export const exitFullscreen = async () => {
+  try {
+    const appWindow = Window.getCurrent();
+    if (await appWindow.isFullscreen()) {
+      await appWindow.setFullscreen(false);
+    }
+  } catch (error) {
+    console.error("Failed to exit fullscreen mode:", error);
+    throw error;
+  }
+};
+
+/**
+ * Maximizes the window
+ * @returns {Promise<void>}
+ */
+export const maximizeWindow = async () => {
+  try {
+    const appWindow = Window.getCurrent();
+    await appWindow.maximize();
+  } catch (error) {
+    console.error("Failed to maximize window:", error);
+    throw error;
+  }
+};
+
+/**
+ * Minimizes the window
+ * @returns {Promise<void>}
+ */
+export const minimizeWindow = async () => {
+  try {
+    const appWindow = Window.getCurrent();
+    await appWindow.minimize();
+  } catch (error) {
+    console.error("Failed to minimize window:", error);
+    throw error;
+  }
+}; 

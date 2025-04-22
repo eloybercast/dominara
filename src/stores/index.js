@@ -1,4 +1,4 @@
-import useAuthStore from "./auth";
+import useAuthStore from "./backend/auth";
 
 export const clearAllCaches = () => {
   useAuthStore.getState().clearFormData();

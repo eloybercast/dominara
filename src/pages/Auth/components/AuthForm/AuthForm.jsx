@@ -3,7 +3,7 @@ import styles from "./AuthForm.module.scss";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import VerifyMail from "./components/VerifyMail/VerifyMail";
-import useAuthStore from "../../../../stores/auth";
+import useAuthStore from "../../../../stores/backend/auth";
 import { motion, AnimatePresence } from "framer-motion";
 import { slideVariants, springTransition } from "./animations/formAnimations";
 

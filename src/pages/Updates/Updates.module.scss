@@ -6,6 +6,8 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
+
+  background-color: var(--gray-2);
 }
 
 .updates__logo {
@@ -16,8 +18,8 @@
   justify-content: center;
 
   img {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
   }
 }
 

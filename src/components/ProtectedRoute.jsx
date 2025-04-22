@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import useAuthStore from "../stores/auth";
+import useAuthStore from "../stores/backend/auth";
 
 /**
  * ProtectedRoute - Redirects to /auth if not authenticated

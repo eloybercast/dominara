@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { processDeepLink } from "../services/backend/auth.service";
+import { processDeepLink } from "../../services/backend/auth.service";
 
 const useAuthStore = create((set, get) => ({
   isAuthenticated: false,
