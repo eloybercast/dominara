@@ -20,7 +20,7 @@ const Updates = () => {
   useEffect(() => {
     checkForUpdates().then((updateAvailable) => {
       if (!updateAvailable) {
-        navigate("/home");
+        navigate("/lobby");
       }
     });
   }, [checkForUpdates, navigate]);

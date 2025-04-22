@@ -12,10 +12,8 @@ const ProtectedRoute = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // First try to initialize auth from localStorage
     const authInitialized = initializeAuth();
 
-    // If still not authenticated, redirect to auth page
     if (!authInitialized && !isAuthenticated) {
       navigate("/auth");
     }
