@@ -15,7 +15,7 @@
         "label": "main",
         "title": "dominara",
         "resizable": false,
-        "width": 900,
+        "width": 300,
         "height": 500,
         "visible": true,
         "url": "/"

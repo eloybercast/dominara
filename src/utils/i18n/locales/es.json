@@ -35,5 +35,13 @@
     "logout": "Sesión cerrada exitosamente",
     "email_verification_sent": "Correo de verificación enviado exitosamente",
     "email_verified": "Correo electrónico verificado exitosamente"
+  },
+  "lobby": {
+    "modes": {
+      "play": "Jugar",
+      "locker": "Casillero",
+      "season_pass": "Pase de Temporada",
+      "item_shop": "Tienda de Objetos"
+    }
   }
 }

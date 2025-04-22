@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import useUpdateStore from "../../stores/tauri/updates";
+import useUserStore from "../../stores/backend/user";
+import useFriendsStore from "../../stores/backend/friends";
 import logoIcon from "../../assets/logo.svg";
 import styles from "./Updates.module.scss";
 import ProgressBar from "../../components/Progress/ProgressBar/ProgressBar";
@@ -16,19 +18,32 @@ const formatBytes = (bytes) => {
 
 const Updates = () => {
   const { errorMessage, checkForUpdates, downloadProgress, updateStatus, isUpdating } = useUpdateStore();
+  const { fetchMe, fetchCoins } = useUserStore();
+  const { fetchFriends } = useFriendsStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    resizeAndCenterWindow(300, 500).catch(err => {
+    resizeAndCenterWindow(300, 500).catch((err) => {
       console.error("Failed to resize window:", err);
     });
 
-    checkForUpdates().then((updateAvailable) => {
+    checkForUpdates().then(async (updateAvailable) => {
       if (!updateAvailable) {
-        navigate("/lobby");
+        try {
+          await Promise.all([
+            fetchMe().catch((error) => console.error("Error fetching user data:", error)),
+            fetchCoins().catch((error) => console.error("Error fetching coins:", error)),
+            fetchFriends().catch((error) => console.error("Error fetching friends:", error)),
+          ]);
+
+          navigate("/lobby");
+        } catch (error) {
+          console.error("Error loading data:", error);
+          navigate("/lobby");
+        }
       }
     });
-  }, [checkForUpdates, navigate]);
+  }, [checkForUpdates, fetchMe, fetchCoins, fetchFriends, navigate]);
 
   return (
     <main className={styles.updates}>

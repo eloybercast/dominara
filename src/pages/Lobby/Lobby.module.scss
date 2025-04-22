@@ -1,0 +1,38 @@
+.lobby {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.lobby__topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 6rem);
+  height: 15%;
+  margin-top: 2rem;
+  margin-left: 2rem;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+}
+
+.lobby__modeSelector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 275px;
+  margin-left: 2rem;
+}

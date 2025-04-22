@@ -35,5 +35,13 @@
     "logout": "Logged out successfully",
     "email_verification_sent": "Verification email sent successfully",
     "email_verified": "Email verified successfully"
+  },
+  "lobby": {
+    "modes": {
+      "play": "Play",
+      "locker": "Locker",
+      "season_pass": "Season Pass",
+      "item_shop": "Item Shop"
+    }
   }
 }
