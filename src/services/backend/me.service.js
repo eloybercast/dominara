@@ -151,11 +151,9 @@ export const getUserCoins = async () => {
  * @throws {Error} Formatted error
  */
 const handleError = (error) => {
-  // Extract error details from response if available
   const errorCode = error.response?.data?.code || error.code;
   const errorMessage = error.response?.data?.message || error.message;
 
-  // Create a structured error object
   const formattedError = new Error(
     getErrorMessage({
       code: errorCode,
