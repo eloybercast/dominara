@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { setFullscreen, exitFullscreen } from "../../utils/tauri/windowUtils";
+import { formatNumber } from "../../utils/format/numbersFormatting";
 import styles from "./Lobby.module.scss";
 import ModeSelector from "./components/ModeSelector/ModeSelector";
 import Container from "./components/Container/Container";
@@ -31,7 +32,7 @@ const Lobby = () => {
           <Container icon={FaUserFriends} text={friends.length} />
         </div>
         <div className={styles.lobby__topbar__right}>
-          <Container icon={GiTwoCoins} text={user?.coins} />
+          <Container icon={GiTwoCoins} text={formatNumber(user.coins)} />
           <Container icon={GiHamburgerMenu} text={null} />
         </div>
       </section>
