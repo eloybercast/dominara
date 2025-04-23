@@ -24,18 +24,50 @@
 
   &:nth-child(1) {
     transform: rotate(1deg);
+
+    &:hover {
+      transform: rotate(-1deg);
+    }
+
+    &:active {
+      transform: rotate(0deg) scale(0.97);
+    }
   }
 
   &:nth-child(2) {
     transform: rotate(-1.5deg);
+
+    &:hover {
+      transform: rotate(0.5deg);
+    }
+
+    &:active {
+      transform: rotate(0deg) scale(0.97);
+    }
   }
 
   &:nth-child(3) {
     transform: rotate(-1deg);
+
+    &:hover {
+      transform: rotate(0.5deg);
+    }
+
+    &:active {
+      transform: rotate(0deg) scale(0.97);
+    }
   }
 
   &:nth-child(4) {
     transform: rotate(0.5deg);
+
+    &:hover {
+      transform: rotate(-0.5deg);
+    }
+
+    &:active {
+      transform: rotate(0deg) scale(0.97);
+    }
   }
 }
 
