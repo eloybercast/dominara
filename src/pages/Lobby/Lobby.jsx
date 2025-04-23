@@ -13,11 +13,12 @@ import { GiHamburgerMenu, GiTwoCoins } from "react-icons/gi";
 import useFriendsStore from "../../stores/backend/friends";
 import useUserStore from "../../stores/backend/user";
 import useLobbbyModeStore from "../../stores/common/lobbyMode";
+import { AnimatePresence } from "framer-motion";
 
 const Lobby = () => {
   const { friends } = useFriendsStore();
   const { user } = useUserStore();
-  const { selectedMode } = useLobbbyModeStore();
+  const { selectedMode, isExiting } = useLobbbyModeStore();
 
   useEffect(() => {
     setFullscreen().catch((error) => {
@@ -34,15 +35,15 @@ const Lobby = () => {
   const renderSelectedMode = () => {
     switch (selectedMode) {
       case "play":
-        return <Play />;
+        return <Play key="play" isExiting={isExiting} />;
       case "locker":
-        return <Locker />;
+        return <Locker key="locker" isExiting={isExiting} />;
       case "season_pass":
-        return <BattlePass />;
+        return <BattlePass key="season_pass" isExiting={isExiting} />;
       case "item_shop":
-        return <Shop />;
+        return <Shop key="item_shop" isExiting={isExiting} />;
       default:
-        return <Play />;
+        return <Play key="play" isExiting={isExiting} />;
     }
   };
 
@@ -60,7 +61,9 @@ const Lobby = () => {
       <section className={styles.lobby__modeSelector}>
         <ModeSelector />
       </section>
-      <section className={styles.lobby__content}>{renderSelectedMode()}</section>
+      <section className={styles.lobby__content}>
+        <AnimatePresence mode="wait">{renderSelectedMode()}</AnimatePresence>
+      </section>
     </main>
   );
 };
