@@ -42,6 +42,14 @@
       "locker": "Casillero",
       "season_pass": "Pase de Temporada",
       "item_shop": "Tienda de Objetos"
+    },
+    "currentGamemode": "Modo de Juego Actual",
+    "changeMode": "Cambiar Modo",
+    "play": "JUGAR",
+    "gamemodes": {
+      "classic_5v5": "Clásico 5vs5",
+      "pvp_1v1": "PvP 1vs1",
+      "story_mode": "Modo Historia"
     }
   }
 }

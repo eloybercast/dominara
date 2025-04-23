@@ -42,6 +42,14 @@
       "locker": "Locker",
       "season_pass": "Season Pass",
       "item_shop": "Item Shop"
+    },
+    "currentGamemode": "Current Game Mode",
+    "changeMode": "Change Mode",
+    "play": "PLAY",
+    "gamemodes": {
+      "classic_5v5": "Classic 5vs5",
+      "pvp_1v1": "PvP 1vs1",
+      "story_mode": "Story Mode"
     }
   }
 }
