@@ -1,0 +1,20 @@
+.play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: red;
+}
+
+.play__currentGamemode {
+  width: 375px;
+  height: 215px;
+
+  position: absolute;
+  bottom: 2.5rem;
+  right: 2.5rem;
+}

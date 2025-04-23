@@ -3,12 +3,13 @@
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+
+  z-index: 2;
 }
 
 .modeOption {
   border-radius: 5px;
   text-align: center;
-  text-transform: uppercase;
   padding: 0.1rem;
 
   color: var(--white);
