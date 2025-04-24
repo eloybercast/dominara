@@ -10,6 +10,7 @@
 
   border-radius: 5px;
   border: 2px solid var(--black);
+  box-shadow: 0 0 10px 0 var(--black-opacity-2);
 
   background-color: var(--black-opacity-3);
 }
@@ -81,17 +82,21 @@
     border-radius: 5px;
 
     background: linear-gradient(to right, var(--gold-1), var(--gold-3));
+    background-size: 200% 100%;
+    background-position: right bottom;
     color: var(--black);
     border: 2px solid var(--black);
 
     text-align: center;
     transform: rotate(-1deg);
-    transition: all 0.2s ease;
+    transition: all 0.4s ease;
 
     &:hover {
-      background: linear-gradient(to right, var(--gold-3), var(--gold-1));
-      transform: rotate(1deg) scale(1.03);
-      box-shadow: 0 0 10px var(--gold-1);
+      background-position: left bottom;
+      transform: rotate(1deg) scale(1.05);
+      box-shadow: 0 0 15px var(--gold-1), 0 0 5px var(--gold-3);
+      letter-spacing: 1px;
+      border-color: var(--gold-4);
     }
 
     &:active {
