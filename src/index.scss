@@ -11,8 +11,6 @@
   -moz-user-select: none;
   -ms-user-select: none;
   cursor: default;
-
-  text-transform: uppercase;
 }
 
 input,
@@ -75,6 +73,7 @@ h4,
 h5 {
   font-family: "Carter One";
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 html {
@@ -101,6 +100,9 @@ h5 {
   font-size: 1.25rem; /* 20px */
 }
 
-small {
+small,
+p,
+span {
   font-size: 0.8rem; /* 12.8px */
+  text-transform: uppercase;
 }

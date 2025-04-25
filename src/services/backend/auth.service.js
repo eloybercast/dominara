@@ -2,6 +2,20 @@ import axios from "axios";
 
 const API_URL = "https://dominara-backend.vercel.app";
 
+/**
+ * Handles unauthorized errors by logging out the user
+ * @param {Error} error - The error object
+ * @returns {boolean} - Whether the error was an unauthorized error and handled
+ */
+export const handleUnauthorizedError = (error) => {
+  if (error.response?.status === 401 || error.code === "invalid_token" || error.code === "token_expired") {
+    logout();
+    window.location.reload();
+    return true;
+  }
+  return false;
+};
+
 const getAuthHeader = () => {
   const token = localStorage.getItem("token");
   return token ? { Authorization: `Bearer ${token}` } : {};
@@ -183,6 +197,7 @@ export const verifyEmail = async (code) => {
 export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
+  window.location.reload();
 };
 
 /**
@@ -250,6 +265,7 @@ const authService = {
   getGoogleAuthUrl,
   processGoogleAuth,
   processDeepLink,
+  handleUnauthorizedError,
 };
 
 export default authService;

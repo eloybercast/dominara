@@ -10,3 +10,16 @@
 
   background-color: rgba(255, 255, 0, 0.2);
 }
+
+.shop__container {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+
+  width: 70%;
+  max-width: 1400px;
+  height: 75%;
+
+  margin-right: 4rem;
+}

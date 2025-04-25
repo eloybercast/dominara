@@ -54,7 +54,7 @@ const Lobby = () => {
           <Container icon={FaUserFriends} text={friends.length} />
         </div>
         <div className={styles.lobby__topbar__right}>
-          <Container icon={GiTwoCoins} text={formatNumber(user.coins)} />
+          <Container icon={GiTwoCoins} text={formatNumber(user?.coins || 0)} />
           <Container icon={GiHamburgerMenu} text={null} />
         </div>
       </section>

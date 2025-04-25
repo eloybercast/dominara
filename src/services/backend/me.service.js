@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getErrorMessage } from "../../utils/i18n";
+import { handleUnauthorizedError } from "./auth.service";
 
 const API_URL = "https://dominara-backend.vercel.app";
 
@@ -151,6 +152,13 @@ export const getUserCoins = async () => {
  * @throws {Error} Formatted error
  */
 const handleError = (error) => {
+  // Check if it's an unauthorized error and handle it
+  if (handleUnauthorizedError(error)) {
+    const authError = new Error("Session expired. Please login again.");
+    authError.code = "session_expired";
+    throw authError;
+  }
+
   const errorCode = error.response?.data?.code || error.code;
   const errorMessage = error.response?.data?.message || error.message;
 
