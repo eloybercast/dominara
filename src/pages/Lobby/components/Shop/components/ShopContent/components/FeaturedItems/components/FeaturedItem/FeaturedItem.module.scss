@@ -23,21 +23,6 @@
   }
 }
 
-.featuredItem__rarity {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  z-index: 2;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-}
-
 .featuredItem__content {
   position: absolute;
   bottom: 0;
@@ -61,7 +46,14 @@
   margin-left: 0.5rem;
 }
 
-.featuredItem__price {
-  color: var(--gold-2);
-  margin-right: 0.5rem;
+.featuredItem__rarity {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0.5rem;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
