@@ -2,7 +2,7 @@ import axios from "axios";
 import { getErrorMessage } from "../../utils/i18n";
 import { handleUnauthorizedError } from "./auth.service";
 
-const API_URL = "https://dominara-backend.vercel.app";
+const API_URL = import.meta.env.VITE_API_URL;
 
 /**
  * Get authenticated user's profile

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://dominara-backend.vercel.app";
+const API_URL = import.meta.env.VITE_API_URL;
 
 /**
  * Handles unauthorized errors by logging out the user
