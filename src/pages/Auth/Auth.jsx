@@ -5,7 +5,7 @@ import { resizeAndCenterWindow } from "../../utils/tauri/windowUtils";
 
 const Auth = () => {
   useEffect(() => {
-    resizeAndCenterWindow(1200, 800).catch(err => {
+    resizeAndCenterWindow(1200, 800).catch((err) => {
       console.error("Failed to resize window:", err);
     });
   }, []);

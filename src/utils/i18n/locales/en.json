@@ -8,7 +8,7 @@
     "error_passwords_not_match": "Passwords do not match",
     "error_invalid_credentials": "Invalid email or password",
     "error_google_login_required": "Please use Google to log in with this account",
-    "error_no_token": "Authorization token is missing",
+    "error_no_token": "No token provided",
     "error_google_auth_failed": "Google authentication failed",
     "error_user_not_found": "User not found",
     "error_email_already_verified": "Email is already verified",
@@ -27,7 +27,14 @@
   "error": {
     "server": "Server error. Please try again later",
     "too_many_requests": "Too many requests. Please try again later",
-    "unknown": "An unexpected error occurred"
+    "unknown": "An unexpected error occurred",
+    "error_no_token": "No token provided",
+    "error_missing_username": "Username is required",
+    "error_self_request": "You cannot send a friend request to yourself",
+    "error_friendship_exists": "A friendship or request already exists with this user",
+    "error_insufficient_permissions": "Insufficient permissions",
+    "error_user_not_found": "User not found",
+    "error_rate_limit_second": "Too many requests"
   },
   "success": {
     "registration": "Registration successful",
@@ -51,5 +58,14 @@
       "pvp_1v1": "PvP 1vs1",
       "story_mode": "Story Mode"
     }
+  },
+  "friends": {
+    "add_friend_placeholder": "Enter username",
+    "social": "Social",
+    "sending_request": "Sending request to {username}... crossing fingers!",
+    "request_sent_success": "Woohoo! Friend request sent to \"{username}\". Now we wait!",
+    "error_user_not_found": "Hmm, we couldn't find anyone named \"{username}\". Double-check the spelling or try someone else!",
+    "error_self_request": "You can't befriend yourself! As much as we love self-love, try sending requests to other players.",
+    "error_friendship_exists": "You're already friends or have a pending request with this player. Patience is a virtue!"
   }
 }

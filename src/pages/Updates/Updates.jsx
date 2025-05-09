@@ -17,7 +17,13 @@ const formatBytes = (bytes) => {
 };
 
 const Updates = () => {
-  const { errorMessage, checkForUpdates, downloadProgress, updateStatus, isUpdating } = useUpdateStore();
+  const {
+    errorMessage,
+    checkForUpdates,
+    downloadProgress,
+    updateStatus,
+    isUpdating,
+  } = useUpdateStore();
   const { fetchMe, fetchCoins } = useUserStore();
   const { fetchFriends } = useFriendsStore();
   const navigate = useNavigate();
@@ -31,9 +37,15 @@ const Updates = () => {
       if (!updateAvailable) {
         try {
           await Promise.all([
-            fetchMe().catch((error) => console.error("Error fetching user data:", error)),
-            fetchCoins().catch((error) => console.error("Error fetching coins:", error)),
-            fetchFriends().catch((error) => console.error("Error fetching friends:", error)),
+            fetchMe().catch((error) =>
+              console.error("Error fetching user data:", error)
+            ),
+            fetchCoins().catch((error) =>
+              console.error("Error fetching coins:", error)
+            ),
+            fetchFriends().catch((error) =>
+              console.error("Error fetching friends:", error)
+            ),
           ]);
 
           navigate("/lobby");
@@ -52,10 +64,14 @@ const Updates = () => {
       </section>
       <section className={styles.updates__progress}>
         {isUpdating ? (
-          <ProgressBar progress={downloadProgress.downloaded} total={downloadProgress.total} />
+          <ProgressBar
+            progress={downloadProgress.downloaded}
+            total={downloadProgress.total}
+          />
         ) : (
           <small>
-            {formatBytes(downloadProgress.downloaded)} / {formatBytes(downloadProgress.total)}
+            {formatBytes(downloadProgress.downloaded)} /{" "}
+            {formatBytes(downloadProgress.total)}
           </small>
         )}
       </section>

@@ -1,8 +1,7 @@
 import axios from "axios";
 import { getErrorMessage } from "../../utils/i18n";
 import { handleUnauthorizedError } from "./auth.service";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_URL } from "../index";
 
 /**
  * Get authenticated user's profile

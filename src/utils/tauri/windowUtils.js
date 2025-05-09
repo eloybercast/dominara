@@ -43,9 +43,9 @@ export const centerWindow = async () => {
  */
 export const resizeAndCenterWindow = async (width, height, delay = 100) => {
   try {
-    await centerWindow();
-
     await resizeWindow(width, height);
+
+    await centerWindow();
 
     setTimeout(async () => {
       try {

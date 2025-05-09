@@ -27,7 +27,14 @@
   "error": {
     "server": "Error del servidor. Inténtalo de nuevo más tarde",
     "too_many_requests": "Demasiadas solicitudes. Inténtalo de nuevo más tarde",
-    "unknown": "Ocurrió un error inesperado"
+    "unknown": "Ocurrió un error inesperado",
+    "error_no_token": "Falta el token de autorización",
+    "error_missing_receiver_id": "Se requiere el ID del destinatario",
+    "error_self_request": "No puedes enviarte una solicitud de amistad a ti mismo",
+    "error_friendship_exists": "Ya existe una amistad o solicitud con este usuario",
+    "error_insufficient_permissions": "No tienes permiso para realizar esta acción",
+    "error_user_not_found": "Usuario no encontrado",
+    "error_rate_limit_second": "Demasiadas solicitudes. Inténtalo de nuevo más tarde"
   },
   "success": {
     "registration": "Registro exitoso",
@@ -51,5 +58,14 @@
       "pvp_1v1": "PvP 1vs1",
       "story_mode": "Modo Historia"
     }
+  },
+  "friends": {
+    "add_friend_placeholder": "Ingresa nombre de usuario",
+    "social": "Social",
+    "sending_request": "Enviando solicitud a {username}... ¡dedos cruzados!",
+    "request_sent_success": "¡Genial! Solicitud enviada a \"{username}\". ¡Ahora a esperar!",
+    "error_user_not_found": "Mmm, no pudimos encontrar a nadie llamado \"{username}\". ¡Revisa que esté bien escrito o prueba con otro jugador!",
+    "error_self_request": "¡No puedes enviarte una solicitud a ti mismo! Por mucho que nos guste el amor propio, mejor busca otros jugadores.",
+    "error_friendship_exists": "Ya eres amigo o tienes una solicitud pendiente con este jugador. ¡La paciencia es una virtud!"
   }
 }

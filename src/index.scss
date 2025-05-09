@@ -43,6 +43,9 @@ textarea {
   --green-1: #8bc741;
   --green-2: #ace963;
   --green-3: #d0f99e;
+  --green-1-opacity: rgba(139, 199, 65, 0.2);
+  --green-2-opacity: rgba(172, 233, 99, 0.2);
+  --green-3-opacity: rgba(208, 249, 158, 0.2);
 
   --orange-1: #ea9813;
   --orange-2: #feb745;
@@ -59,6 +62,9 @@ textarea {
   --black-opacity-2: rgba(0, 0, 0, 0.75);
   --black-opacity-3: rgba(0, 0, 0, 0.6);
   --white: #ffffff;
+  --white-opacity-1: rgba(255, 255, 255, 0.95);
+  --white-opacity-2: rgba(255, 255, 255, 0.75);
+  --white-opacity-3: rgba(255, 255, 255, 0.6);
 }
 
 body {

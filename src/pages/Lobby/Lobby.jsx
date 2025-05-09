@@ -8,17 +8,20 @@ import Play from "./components/Play/Play";
 import Locker from "./components/Locker/Locker";
 import Shop from "./components/Shop/Shop";
 import BattlePass from "./components/BattlePass/BattlePass";
+import FriendsMenu from "../../components/Menus/Friends/FriendsMenu";
 import { FaUserFriends } from "react-icons/fa";
 import { GiHamburgerMenu, GiTwoCoins } from "react-icons/gi";
 import useFriendsStore from "../../stores/backend/friends";
 import useUserStore from "../../stores/backend/user";
 import useLobbbyModeStore from "../../stores/common/lobbyMode";
+import useFriendsMenuStore from "../../stores/common/friendsMenu";
 import { AnimatePresence } from "framer-motion";
 
 const Lobby = () => {
   const { friends } = useFriendsStore();
   const { user } = useUserStore();
   const { selectedMode, isExiting } = useLobbbyModeStore();
+  const { openMenu } = useFriendsMenuStore();
 
   useEffect(() => {
     setFullscreen().catch((error) => {
@@ -51,7 +54,9 @@ const Lobby = () => {
     <main className={styles.lobby}>
       <section className={styles.lobby__topbar}>
         <div className={styles.lobby__topbar__left}>
-          <Container icon={FaUserFriends} text={friends.length} />
+          <div className={styles.clickable} onClick={openMenu}>
+            <Container icon={FaUserFriends} text={friends.length} />
+          </div>
         </div>
         <div className={styles.lobby__topbar__right}>
           <Container icon={GiTwoCoins} text={formatNumber(user?.coins || 0)} />
@@ -64,6 +69,8 @@ const Lobby = () => {
       <section className={styles.lobby__content}>
         <AnimatePresence mode="wait">{renderSelectedMode()}</AnimatePresence>
       </section>
+
+      <FriendsMenu />
     </main>
   );
 };
