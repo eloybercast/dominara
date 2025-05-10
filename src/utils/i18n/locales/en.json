@@ -81,5 +81,12 @@
     "tutorial": "Tutorial",
     "credits": "Credits",
     "leave_game": "Leave Game"
+  },
+  "confirmChoice": {
+    "defaultTitle": "Confirm",
+    "defaultMessage": "Are you sure?",
+    "confirmButton": "Yes",
+    "cancelButton": "No",
+    "leaveGameMessage": "Are you sure you want to exit Dominara?"
   }
 }
