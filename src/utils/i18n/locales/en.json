@@ -67,5 +67,19 @@
     "error_user_not_found": "Hmm, we couldn't find anyone named \"{username}\". Double-check the spelling or try someone else!",
     "error_self_request": "You can't befriend yourself! As much as we love self-love, try sending requests to other players.",
     "error_friendship_exists": "You're already friends or have a pending request with this player. Patience is a virtue!"
+  },
+  "options": {
+    "menu": "Menu",
+    "game_settings": "Settings",
+    "audio": "Audio",
+    "graphics": "Graphics",
+    "controls": "Controls",
+    "account": "Account",
+    "report_bug": "Report a Bug",
+    "privacy_policy": "Privacy Policy",
+    "code_of_conduct": "Code of Conduct",
+    "tutorial": "Tutorial",
+    "credits": "Credits",
+    "leave_game": "Leave Game"
   }
 }

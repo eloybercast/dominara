@@ -9,12 +9,14 @@ import Locker from "./components/Locker/Locker";
 import Shop from "./components/Shop/Shop";
 import BattlePass from "./components/BattlePass/BattlePass";
 import FriendsMenu from "../../components/Menus/Friends/FriendsMenu";
+import OptionsMenu from "../../components/Menus/OptionsMenu/OptionsMenu";
 import { FaUserFriends } from "react-icons/fa";
 import { GiHamburgerMenu, GiTwoCoins } from "react-icons/gi";
 import useFriendsStore from "../../stores/backend/friends";
 import useUserStore from "../../stores/backend/user";
 import useLobbbyModeStore from "../../stores/common/lobbyMode";
 import useFriendsMenuStore from "../../stores/common/friendsMenu";
+import useOptionsMenuStore from "../../stores/common/optionsMenu";
 import { AnimatePresence } from "framer-motion";
 
 const Lobby = () => {
@@ -22,6 +24,7 @@ const Lobby = () => {
   const { user } = useUserStore();
   const { selectedMode, isExiting } = useLobbbyModeStore();
   const { openMenu } = useFriendsMenuStore();
+  const { toggleMenu: toggleOptionsMenu } = useOptionsMenuStore();
 
   useEffect(() => {
     setFullscreen().catch((error) => {
@@ -60,7 +63,9 @@ const Lobby = () => {
         </div>
         <div className={styles.lobby__topbar__right}>
           <Container icon={GiTwoCoins} text={formatNumber(user?.coins || 0)} />
-          <Container icon={GiHamburgerMenu} text={null} />
+          <div className={styles.clickable} onClick={toggleOptionsMenu}>
+            <Container icon={GiHamburgerMenu} text={null} />
+          </div>
         </div>
       </section>
       <section className={styles.lobby__modeSelector}>
@@ -71,6 +76,7 @@ const Lobby = () => {
       </section>
 
       <FriendsMenu />
+      <OptionsMenu />
     </main>
   );
 };

@@ -67,5 +67,15 @@
     "error_user_not_found": "Mmm, no pudimos encontrar a nadie llamado \"{username}\". ¡Revisa que esté bien escrito o prueba con otro jugador!",
     "error_self_request": "¡No puedes enviarte una solicitud a ti mismo! Por mucho que nos guste el amor propio, mejor busca otros jugadores.",
     "error_friendship_exists": "Ya eres amigo o tienes una solicitud pendiente con este jugador. ¡La paciencia es una virtud!"
+  },
+  "options": {
+    "menu": "Menú",
+    "game_settings": "Configuración",
+    "report_bug": "Reportar un Error",
+    "privacy_policy": "Política de Privacidad",
+    "code_of_conduct": "Código de Conducta",
+    "tutorial": "Tutorial",
+    "credits": "Créditos",
+    "leave_game": "Salir del Juego"
   }
 }
